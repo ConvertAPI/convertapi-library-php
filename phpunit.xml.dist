@@ -1,0 +1,13 @@
+<phpunit bootstrap="tests/bootstrap.no_autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="ConvertApi Test Suite">
+            <directory suffix="Test.php">./tests/ConvertApi/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./lib/ConvertApi/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

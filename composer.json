@@ -1,0 +1,29 @@
+{
+    "name": "ConvertAPI/convertapi-php",
+    "description": "Convert API PHP Client",
+    "keywords": ["convert", "api", "client", "conversion"],
+    "homepage": "https://github.com/ConvertAPI/convertapi-php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ConvertAPI and contributors",
+            "homepage": "https://github.com/ConvertAPI/convertapi-php/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "ConvertApi\\": "lib/"
+        }
+    }
+}

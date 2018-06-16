@@ -1,0 +1,12 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+.vscode
+Icon
+._*
+.Spotlight-V100
+.Trashes
+*.sublime-*
+vendor
+composer.lock
+bin
