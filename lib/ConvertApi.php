@@ -9,6 +9,9 @@ namespace ConvertApi;
  */
 class ConvertApi
 {
+    // ConvertAPI client version.
+    const VERSION = '0.1.0';
+
     // @var string The Convert API secret. You can get your secret at https://www.convertapi.com/a
     public static $apiSecret;
 
@@ -33,10 +36,8 @@ class ConvertApi
     // @var string File download timeout.
     public static $downloadTimeout = 600;
 
-    /**
-     * ConvertAPI client version.
-     */
-    const VERSION = '0.1.0';
+    // @var static \ConvertApi\Client
+    private static $_client;
 
     /**
      * @return string The API secret used for requests.
@@ -54,5 +55,16 @@ class ConvertApi
     public static function setApiSecret($apiSecret)
     {
         self::$apiSecret = $apiSecret;
+    }
+
+    /**
+     * @return \ConvertApi\Client API client
+     */
+    public static function client()
+    {
+        if (!isset(self::$_client))
+            self::$_client = new Client;
+
+        return self::$_client;
     }
 }

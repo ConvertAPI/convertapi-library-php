@@ -9,4 +9,9 @@ class ConvertApiTest extends TestCase
         ConvertApi::setApiSecret('test-secret');
         $this->assertEquals('test-secret', ConvertApi::getApiSecret());
     }
+
+    public function testClient()
+    {
+        $this->assertInstanceOf('\ConvertApi\Client', ConvertApi::client());
+    }
 }
