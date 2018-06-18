@@ -21,7 +21,7 @@ class Client
         if ($response === false)
             $this->handleCurlError($ch);
 
-        $this->handleResponseError($ch, $response);
+        $this->checkResponse($ch, $response);
 
         curl_close($ch);
 
@@ -35,7 +35,7 @@ class Client
         throw new Error\Client($message);
     }
 
-    private function handleResponseError($ch, $response)
+    private function checkResponse($ch, $response)
     {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);;
 
