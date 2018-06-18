@@ -10,11 +10,11 @@ class Client
 
         curl_setopt($ch, CURLOPT_URL, $this->url($path));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->defaultHeaders());
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$readTimeout);
         curl_setopt($ch, CURLOPT_ENCODING , 'gzip,deflate');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $response = curl_exec($ch);
 
