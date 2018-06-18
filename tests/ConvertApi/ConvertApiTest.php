@@ -32,4 +32,12 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('\ConvertApi\Client', ConvertApi::client());
     }
+
+    public function testGetUser()
+    {
+        $user_info = ConvertApi::getUser();
+
+        $this->assertInternalType('array', $user_info);
+        $this->assertArrayHasKey('SecondsLeft', $user_info);
+    }
 }

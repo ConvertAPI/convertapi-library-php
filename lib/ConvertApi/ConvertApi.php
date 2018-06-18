@@ -58,6 +58,14 @@ class ConvertApi
     }
 
     /**
+     * @return array User information
+     */
+    public static function getUser()
+    {
+        return self::client()->get('user');
+    }
+
+    /**
      * @return \ConvertApi\Client API client
      */
     public static function client()
