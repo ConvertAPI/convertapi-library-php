@@ -11,7 +11,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         // Save original values so that we can restore them after running tests
         $this->origApiSecret = ConvertApi::getApiSecret();
 
-        ConvertApi::setApiSecret($_ENV['CONVERT_API_SECRET']);
+        ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
     }
 
     protected function tearDown()
