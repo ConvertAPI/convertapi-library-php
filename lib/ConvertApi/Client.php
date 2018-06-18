@@ -30,7 +30,7 @@ class Client
 
     private function handleCurlError($ch)
     {
-        $message = curl_error($curl);
+        $message = curl_error($ch);
 
         throw new Error\Client($message);
     }
