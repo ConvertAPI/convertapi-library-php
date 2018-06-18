@@ -1,4 +1,4 @@
-<phpunit bootstrap="tests/bootstrap.no_autoload.php" colors="true">
+<phpunit bootstrap="vendor/autoload.php" colors="true">
     <testsuites>
         <testsuite name="ConvertApi Test Suite">
             <directory suffix="Test.php">./tests/ConvertApi/</directory>
