@@ -68,7 +68,7 @@ class Task
     {
         $resource = $params['File'];
         $resource = $resource ?: $params['Url'];
-        $resource = $resource ?: ((array)$params['Files'])[0];
+        $resource = $resource ?: $params['Files'][0];
 
         $detector = new FormatDetector($resource);
 
