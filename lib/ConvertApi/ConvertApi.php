@@ -67,7 +67,7 @@ class ConvertApi
      *
      * @return \ConvertApi\Result Conversion result
      */
-    public static function convert(string $toFormat, array $params, string $fromFormat = null, int $conversionTimeout = null)
+    public static function convert($toFormat, $params, $fromFormat = null, $conversionTimeout = null)
     {
         $task = new Task($fromFormat, $toFormat, $params, $conversionTimeout);
 

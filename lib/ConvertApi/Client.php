@@ -4,7 +4,7 @@ namespace ConvertApi;
 
 class Client
 {
-    public function get(string $path)
+    public function get($path)
     {
         $ch = curl_init();
 
@@ -28,7 +28,7 @@ class Client
         return $this->parseResponse($response);
     }
 
-    public function post(string $path, array $params, int $readTimeout = null)
+    public function post($path, $params, $readTimeout = null)
     {
         $ch = curl_init();
 
