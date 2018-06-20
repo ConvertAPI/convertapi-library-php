@@ -50,11 +50,28 @@ class ConvertApi
     /**
      * Sets API secret used for requests.
      *
-     * @params string $apiSecret
+     * @param string $apiSecret
      */
     public static function setApiSecret($apiSecret)
     {
         self::$apiSecret = $apiSecret;
+    }
+
+    /**
+     * Perform conversion
+     *
+     * @param string $toFormat Convert to format
+     * @param array $params Conversion parameters
+     * @param string $fromFormat Convert from format
+     * @param int $conversionTimeout Conversion timeout
+     *
+     * @return \ConvertApi\Result Conversion result
+     */
+    public static function convert(string $toFormat, array $params, string $fromFormat = null, int $conversionTimeout = null)
+    {
+        $task = new Task($fromFormat, $toFormat, $params, $conversionTimeout);
+
+        return $task->run();
     }
 
     /**

@@ -4,7 +4,7 @@ namespace ConvertApi;
 
 class Client
 {
-    public function get($path)
+    public function get(string $path)
     {
         $ch = curl_init();
 
@@ -13,6 +13,32 @@ class Client
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$readTimeout);
+        curl_setopt($ch, CURLOPT_ENCODING , 'gzip,deflate');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+
+        if ($response === false)
+            $this->handleCurlError($ch);
+
+        $this->checkResponse($ch, $response);
+
+        curl_close($ch);
+
+        return $this->parseResponse($response);
+    }
+
+    public function post(string $path, array $params, int $readTimeout = null)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->url($path));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->defaultHeaders());
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $readTimeout ?: ConvertApi::$readTimeout);
         curl_setopt($ch, CURLOPT_ENCODING , 'gzip,deflate');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

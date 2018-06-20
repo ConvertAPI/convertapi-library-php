@@ -40,4 +40,13 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $user_info);
         $this->assertArrayHasKey('SecondsLeft', $user_info);
     }
+
+    public function testConvert()
+    {
+        $params = ['File' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $this->assertInstanceOf('\ConvertApi\Result', $result);
+    }
 }
