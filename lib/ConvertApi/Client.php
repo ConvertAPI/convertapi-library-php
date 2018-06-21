@@ -29,7 +29,7 @@ class Client
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $readTimeout ?: ConvertApi::$downloadTimeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$downloadTimeout);
 
         curl_exec($ch);
         curl_close($ch);
