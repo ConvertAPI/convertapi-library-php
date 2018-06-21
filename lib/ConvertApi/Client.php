@@ -6,35 +6,26 @@ class Client
 {
     public function get($path)
     {
-        $ch = curl_init();
+        $ch = $this->initCurl($path);
 
-        curl_setopt($ch, CURLOPT_URL, $this->url($path));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->defaultHeaders());
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
-        curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$readTimeout);
-        curl_setopt($ch, CURLOPT_ENCODING , 'gzip,deflate');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($ch);
-
-        if ($response === false)
-            $this->handleCurlError($ch);
-
-        $this->checkResponse($ch, $response);
-
-        curl_close($ch);
-
-        return $this->parseResponse($response);
+        return $this->execute($ch);
     }
 
     public function post($path, $params, $readTimeout = null)
     {
+        $ch = $this->initCurl($path, $readTimeout);
+
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+
+        return $this->execute($ch);
+    }
+
+    private function initCurl($path, $readTimeout = nil)
+    {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->url($path));
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->defaultHeaders());
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
@@ -42,6 +33,11 @@ class Client
         curl_setopt($ch, CURLOPT_ENCODING , 'gzip,deflate');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+        return $ch;
+    }
+
+    private function execute($ch)
+    {
         $response = curl_exec($ch);
 
         if ($response === false)
@@ -75,6 +71,7 @@ class Client
     {
         return json_decode($response, true);
     }
+
 
     private function url($path)
     {
