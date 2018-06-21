@@ -21,7 +21,7 @@ class Client
         return $this->execute($ch);
     }
 
-    private function initCurl($path, $readTimeout = nil)
+    private function initCurl($path, $readTimeout = null)
     {
         $ch = curl_init();
 
