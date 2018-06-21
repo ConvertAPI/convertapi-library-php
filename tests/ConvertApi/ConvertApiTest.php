@@ -48,5 +48,12 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $result = ConvertApi::convert('pdf', $params);
 
         $this->assertInstanceOf('\ConvertApi\Result', $result);
+
+        $files = $result->saveFiles(sys_get_temp_dir());
+
+        $this->assertFileExists($files[0]);
+
+        foreach ($files as $file)
+            unlink($file);
     }
 }

@@ -72,7 +72,6 @@ class Client
         return json_decode($response, true);
     }
 
-
     private function url($path)
     {
         return ConvertApi::$apiBase . $path . '?secret=' . ConvertApi::getApiSecret();
