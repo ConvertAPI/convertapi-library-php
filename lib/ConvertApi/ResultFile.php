@@ -9,25 +9,26 @@ class ResultFile
         $this->fileInfo = $fileInfo;
     }
 
+    function getUrl()
+    {
+        return $this->fileInfo['Url'];
+    }
+
+    function getFileName()
+    {
+        return $this->fileInfo['FileName'];
+    }
+
+    function getFileSize()
+    {
+        return $this->fileInfo['FileSize'];
+    }
+
     function save($path)
     {
         if (is_dir($path))
-            $path = $path . DIRECTORY_SEPARATOR . $this->fileInfo['FileName'];
+            $path = $path . DIRECTORY_SEPARATOR . $this->getFileName();
 
-        $this->download($this->fileInfo['Url'], $path);
-
-        return $path;
-    }
-
-    private function download($url, $path)
-    {
-        $ch = curl_init($url);
-        $fp = fopen($path, 'wb');
-
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-
-        curl_exec($ch);
-        curl_close($ch);
-        fclose($fp);
+        return ConvertApi::client()->download($this->getUrl(), $path);
     }
 }

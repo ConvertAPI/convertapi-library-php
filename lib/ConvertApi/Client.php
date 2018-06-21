@@ -21,6 +21,23 @@ class Client
         return $this->execute($ch);
     }
 
+    public function download($url, $path)
+    {
+        $ch = curl_init($url);
+        $fp = fopen($path, 'wb');
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $readTimeout ?: ConvertApi::$downloadTimeout);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        return $path;
+    }
+
     private function initCurl($path, $readTimeout = null)
     {
         $ch = curl_init();
