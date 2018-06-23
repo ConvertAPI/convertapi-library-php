@@ -70,6 +70,30 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $result->getFile()->getFileSize());
     }
 
+    public function testConvertWithFileUpload()
+    {
+        $fileUpload = new \ConvertApi\FileUpload('examples/files/test.docx', 'custom.docx');
+        $params = ['File' => $fileUpload];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $this->assertInstanceOf('\ConvertApi\Result', $result);
+        $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
+    }
+
+    public function testConvertWithMultipleFiles()
+    {
+        $params = [
+            'Files' => ['examples/files/test.pdf', 'examples/files/test.pdf']
+        ];
+
+        $result = ConvertApi::convert('zip', $params);
+
+        $this->assertInstanceOf('\ConvertApi\Result', $result);
+        $this->assertEquals('test.zip', $result->getFile()->getFileName());
+        $this->assertInternalType('int', $result->getFile()->getFileSize());
+    }
+
     public function testConvertWithUrl()
     {
         $params = ['Url' => 'https://www.convertapi.com'];

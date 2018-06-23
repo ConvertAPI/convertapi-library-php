@@ -16,7 +16,7 @@ class Client
         $ch = $this->initCurl($path, $readTimeout);
 
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->buildFormData($params));
 
         return $this->execute($ch);
     }
@@ -94,6 +94,24 @@ class Client
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         return $ch;
+    }
+
+    private function buildFormData($params)
+    {
+        $data = [];
+
+        foreach ($params as $key => $val)
+        {
+            if (is_array($val))
+            {
+                foreach ($val as $k => $v)
+                    $data["${key}[${k}]"] = $v;
+            }
+            else
+                $data[$key] = $val;
+        }
+
+        return $data;
     }
 
     private function execute($ch)
