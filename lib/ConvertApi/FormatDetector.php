@@ -18,6 +18,9 @@ class FormatDetector
 
     private function path()
     {
+        if (is_a($this->resource, '\ConvertApi\FileUpload'))
+            return $this->resource->getFileName();
+
         return $this->resource;
     }
 }

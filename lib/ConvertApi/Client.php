@@ -21,6 +21,36 @@ class Client
         return $this->execute($ch);
     }
 
+    public function upload($file, $fileName)
+    {
+        $headers = array_merge(
+            $this->defaultHeaders(),
+            [
+                'Content-Type: application/octet-stream',
+                'Transfer-Encoding: chunked',
+                "Content-Disposition: attachment; filename*=UTF-8''" . urlencode($fileName),
+            ]
+        );
+
+        $ch = $this->initCurl('upload', ConvertApi::$uploadTimeout, $headers);
+        $fh = fopen($file, 'rb');
+
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_INFILE, $fh);
+        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));
+
+        try
+        {
+            $result = $this->execute($ch);
+        }
+        finally
+        {
+            fclose($fh);
+        }
+
+        return $result['FileId'];
+    }
+
     public function download($url, $path)
     {
         $ch = curl_init($url);
@@ -38,12 +68,12 @@ class Client
         return $path;
     }
 
-    private function initCurl($path, $readTimeout = null)
+    private function initCurl($path, $readTimeout = null, $headers = null)
     {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->url($path));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->defaultHeaders());
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers ?: $this->defaultHeaders());
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, $readTimeout ?: ConvertApi::$readTimeout);

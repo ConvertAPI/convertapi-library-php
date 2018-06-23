@@ -41,7 +41,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('SecondsLeft', $user_info);
     }
 
-    public function testConvert()
+    public function testConvertWithUrl()
     {
         $params = ['File' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
 
@@ -57,5 +57,16 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         foreach ($files as $file)
             unlink($file);
+    }
+
+    public function testConvertWithFilePath()
+    {
+        $params = ['File' => 'examples/files/test.docx'];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $this->assertInstanceOf('\ConvertApi\Result', $result);
+        $this->assertEquals('test.pdf', $result->getFile()->getFileName());
+        $this->assertInternalType('int', $result->getFile()->getFileSize());
     }
 }
