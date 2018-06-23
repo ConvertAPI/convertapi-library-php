@@ -33,7 +33,91 @@ If you use Composer, these dependencies should be handled automatically. If you 
 
 ## Usage
 
+### Configuration
+
+You can get your secret at https://www.convertapi.com/a
+
+```php
+use \ConvertApi\ConvertApi;
+
+ConvertApi::setApiSecret('your api secret');
+```
+
+### File conversion
+
+Example to convert file to PDF. All supported formats and options can be found
+[here](https://www.convertapi.com).
+
+```php
+$result = ConvertApi::convert('pdf', ['File' => '/path/to/my_file.docx']);
+
+# save to file
+$result->getFile()->save('/path/to/save/file.pdf');
+```
+
+Other result operations:
+
+```php
+# save all result files to folder
+$result->saveFiles('/path/to/save/files');
+
+# get conversion cost
+$cost = $result->getConversionCost();
+```
+
+#### Convert file url
+
+```php
+$result = ConvertApi::convert('pdf', ['File' => 'https://website/my_file.docx']);
+```
+
+#### Specifying from format
+
+```php
+$result = ConvertApi::convert(
+    'pdf',
+    ['File' => '/path/to/my_file'],
+    'docx'
+);
+```
+
+#### Additional conversion parameters
+
+ConvertAPI accepts extra conversion parameters depending on converted formats. All conversion
+parameters and explanations can be found [here](https://www.convertapi.com).
+
+```php
+$result = ConvertApi::convert(
+    'pdf',
+    [
+        'File' => '/path/to/my_file.docx',
+        'PageRange' => '1-10',
+        'PdfResolution' => '150',
+    ]
+);
+```
+
+### User information
+
+You can always check remaining seconds amount by fetching [user information](https://www.convertapi.com/doc/user).
+
+```php
+$info = ConvertApi::getUser();
+
+echo $info['SecondsLeft'];
+```
+
+### More examples
+
+You can find more advanced examples in the [examples/](examples) folder.
+
 ## Development
+
+Testing is done with PHPUnit:
+
+```sh
+CONVERT_API_SECRET=your_api_secret ./bin/phpunit
+```
 
 ## Contributing
 
