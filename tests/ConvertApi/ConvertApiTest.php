@@ -49,6 +49,8 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\ConvertApi\Result', $result);
 
+        $this->assertInternalType('int', $result->getConversionCost());
+
         $files = $result->saveFiles(sys_get_temp_dir());
 
         $this->assertFileExists($files[0]);

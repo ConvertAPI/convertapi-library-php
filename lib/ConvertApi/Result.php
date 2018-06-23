@@ -11,6 +11,11 @@ class Result
         $this->response = $response;
     }
 
+    function getConversionCost()
+    {
+        return $this->response['ConversionCost'];
+    }
+
     function getFile()
     {
         $files = $this->getFiles();
