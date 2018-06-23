@@ -65,9 +65,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertInstanceOf('\ConvertApi\Result', $result);
         $this->assertEquals('test.pdf', $result->getFile()->getFileName());
-        $this->assertInternalType('int', $result->getFile()->getFileSize());
     }
 
     public function testConvertWithFileUpload()
@@ -77,7 +75,6 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertInstanceOf('\ConvertApi\Result', $result);
         $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
     }
 
@@ -89,9 +86,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('zip', $params);
 
-        $this->assertInstanceOf('\ConvertApi\Result', $result);
         $this->assertEquals('test.zip', $result->getFile()->getFileName());
-        $this->assertInternalType('int', $result->getFile()->getFileSize());
     }
 
     public function testConvertWithUrl()
@@ -100,7 +95,19 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertInstanceOf('\ConvertApi\Result', $result);
         $this->assertInternalType('int', $result->getFile()->getFileSize());
+    }
+
+    public function testChainedConversion()
+    {
+        $params = ['File' => 'examples/files/test.docx'];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $params = ['Files' => $result->getFiles()];
+
+        $result = ConvertApi::convert('zip', $params);
+
+        $this->assertEquals('test.zip', $result->getFile()->getFileName());
     }
 }

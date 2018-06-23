@@ -6,6 +6,9 @@ class FileParam
 {
     public static function build($val)
     {
+        if (is_a($val, '\ConvertApi\ResultFile'))
+            return $val->getUrl();
+
         if (is_a($val, '\ConvertApi\FileUpload'))
             return $val;
 
