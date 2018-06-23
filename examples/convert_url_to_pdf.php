@@ -11,6 +11,7 @@ ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
 
 $fromFormat = 'web';
 $conversionTimeout = 180;
+$dir = sys_get_temp_dir();
 
 $result = ConvertApi::convert(
     'pdf',
@@ -22,7 +23,7 @@ $result = ConvertApi::convert(
     $conversionTimeout
 );
 
-$savedFiles = $result->saveFiles(sys_get_temp_dir());
+$savedFiles = $result->saveFiles($dir);
 
 echo "The web page PDF saved to\n";
 

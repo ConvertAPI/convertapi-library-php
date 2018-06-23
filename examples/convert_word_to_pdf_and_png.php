@@ -10,9 +10,10 @@ ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
 # https://www.convertapi.com/docx-to-pdf
 # https://www.convertapi.com/docx-to-png
 
+$dir = sys_get_temp_dir();
+
 # Use upload IO wrapper to upload file only once to the API
 $upload = new \ConvertApi\FileUpload('files/test.docx');
-$dir = sys_get_temp_dir();
 
 $result = ConvertApi::convert('pdf', ['File' => $upload]);
 $savedFiles = $result->saveFiles($dir);
