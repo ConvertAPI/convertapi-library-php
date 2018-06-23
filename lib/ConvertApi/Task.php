@@ -69,8 +69,15 @@ class Task
         if (!empty($params['Url']))
             return 'url';
 
-        $resource = $params['File'];
-        $resource = $resource ?: $params['Files'][0];
+        if (!empty($params['File']))
+        {
+            $resource = $params['File'];
+        }
+        elseif (!empty($params['Files']))
+        {
+            $files = (array)$params['Files'];
+            $resource = $files[0];
+        }
 
         $detector = new FormatDetector($resource);
 
