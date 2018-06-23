@@ -9,21 +9,35 @@ class ResultFile
         $this->fileInfo = $fileInfo;
     }
 
+    /**
+     * @return string Converted file URL
+     */
     function getUrl()
     {
         return $this->fileInfo['Url'];
     }
 
+    /**
+     * @return string Converted file name
+     */
     function getFileName()
     {
         return $this->fileInfo['FileName'];
     }
 
+    /**
+     * @return int Converted file size
+     */
     function getFileSize()
     {
         return $this->fileInfo['FileSize'];
     }
 
+    /**
+     * Save file to path
+     *
+     * @return string Saved file path
+     */
     function save($path)
     {
         if (is_dir($path))

@@ -11,11 +11,17 @@ class Result
         $this->response = $response;
     }
 
+    /**
+     * @return int Conversion cost
+     */
     function getConversionCost()
     {
         return $this->response['ConversionCost'];
     }
 
+    /**
+     * @return \ConvertApi\ResultFile Converted file result
+     */
     function getFile()
     {
         $files = $this->getFiles();
@@ -23,6 +29,9 @@ class Result
         return $files[0];
     }
 
+    /**
+     * @return array Converted file results array
+     */
     function getFiles()
     {
         if (isset($this->files))
