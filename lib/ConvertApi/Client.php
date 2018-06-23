@@ -106,6 +106,8 @@ class Client
                 foreach ($val as $k => $v)
                     $data["${key}[${k}]"] = $v;
             }
+            elseif (is_bool($val))
+                $data[$key] = $val ? 'true' : 'false';
             else
                 $data[$key] = $val;
         }

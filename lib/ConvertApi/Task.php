@@ -18,7 +18,7 @@ class Task
             $this->normalizedParams(),
             [
                 'Timeout' => $this->conversionTimeout,
-                'StoreFile' => 'true',
+                'StoreFile' => true,
             ]
         );
 
