@@ -119,4 +119,17 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('test.zip', $result->getFile()->getFileName());
     }
+
+    public function testApiError()
+    {
+        $params = ['Url' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
+
+        try {
+            ConvertApi::convert('pdf', $params, 'web', 0);
+            $this->fail('Expected exception has not been raised.');
+        } catch (\ConvertApi\Error\Api $e) {
+            $this->assertContains('Parameter validation error.', $e->getMessage());
+            $this->assertEquals(4000, $e->getCode());
+        }
+    }
 }

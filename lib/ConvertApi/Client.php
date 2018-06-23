@@ -142,7 +142,21 @@ class Client
         if ($http_code == 200)
             return;
 
-        throw new Error\Api($response);
+        try
+        {
+            $json = $this->parseResponse($response);
+        }
+        catch (\Exception $e)
+        {
+            throw new Error\Api($response);
+        }
+
+        $message = $json['Message'] . ' Code: ' . $json['Code'];
+
+        if (!empty($json['InvalidParameters']))
+            $message .= ' '. json_encode($json['InvalidParameters']);
+
+        throw new Error\Api($message, $json['Code']);
     }
 
     private function parseResponse($response)
