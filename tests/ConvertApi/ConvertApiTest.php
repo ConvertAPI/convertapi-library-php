@@ -78,6 +78,15 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
     }
 
+    public function testConvertWithSpecifiedSourceFormatAndTimeout()
+    {
+        $params = ['Url' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
+
+        $result = ConvertApi::convert('pdf', $params, 'web', 100);
+
+        $this->assertInternalType('int', $result->getFile()->getFileSize());
+    }
+
     public function testConvertWithMultipleFiles()
     {
         $params = [
