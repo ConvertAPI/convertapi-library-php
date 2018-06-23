@@ -58,7 +58,7 @@ class Task
     {
         $files = [];
 
-        foreach ($values as $val)
+        foreach ((array)$values as $val)
             $files[] = FileParam::build($val);
 
         return $files;
@@ -66,8 +66,10 @@ class Task
 
     private function detectFormat($params)
     {
+        if (!empty($params['Url']))
+            return 'url';
+
         $resource = $params['File'];
-        $resource = $resource ?: $params['Url'];
         $resource = $resource ?: $params['Files'][0];
 
         $detector = new FormatDetector($resource);
