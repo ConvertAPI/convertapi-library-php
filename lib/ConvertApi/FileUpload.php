@@ -12,7 +12,8 @@ class FileUpload
 
     function run()
     {
-        $this->fileID = ConvertApi::client()->upload($this->filePath, $this->fileName);
+        if (!isset($this->fileID))
+            $this->fileID = ConvertApi::client()->upload($this->filePath, $this->fileName);
     }
 
     function __toString()
