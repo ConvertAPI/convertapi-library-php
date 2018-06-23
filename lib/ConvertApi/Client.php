@@ -33,20 +33,23 @@ class Client
         );
 
         $ch = $this->initCurl('upload', ConvertApi::$uploadTimeout, $headers);
-        $fh = fopen($file, 'rb');
+        $fp = fopen($file, 'rb');
 
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_INFILE, $fh);
+        curl_setopt($ch, CURLOPT_INFILE, $fp);
         curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));
 
         try
         {
             $result = $this->execute($ch);
         }
-        finally
+        catch (Exception $e)
         {
-            fclose($fh);
+            fclose($fp);
+            throw $e;
         }
+
+        fclose($fp);
 
         return $result['FileId'];
     }
@@ -61,8 +64,18 @@ class Client
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$downloadTimeout);
 
-        curl_exec($ch);
-        curl_close($ch);
+        try
+        {
+            curl_exec($ch);
+            curl_close($ch);
+        }
+        catch (Exception $e)
+        {
+            fclose($fp);
+            unlink($path);
+            throw $e;
+        }
+
         fclose($fp);
 
         return $path;
