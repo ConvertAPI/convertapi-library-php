@@ -22,6 +22,14 @@ Once composer is installed, execute the following command in your project root t
 composer require convertapi/convertapi-php
 ```
 
+### Manual Installation
+
+If you do not wish to use Composer, you must require ConvertApi autoloader:
+
+```php
+require_once('/path/to/convertapi-php/src/ConvertApi/autoload.php');
+```
+
 ## Dependencies
 
 Library requires the following extensions in order to work properly:
