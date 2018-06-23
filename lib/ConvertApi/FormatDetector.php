@@ -11,9 +11,7 @@ class FormatDetector
 
     function run()
     {
-        $extension = pathinfo($this->path(), PATHINFO_EXTENSION);
-
-        return $extension;
+        return pathinfo($this->path(), PATHINFO_EXTENSION);
     }
 
     private function path()
