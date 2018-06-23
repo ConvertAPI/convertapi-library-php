@@ -10,10 +10,17 @@ class FileParam
             return $val->getUrl();
 
         if (is_a($val, '\ConvertApi\FileUpload'))
+        {
+            $val->run();
             return $val;
+        }
 
         if (is_file($val))
-            return new FileUpload($val);
+        {
+            $fileUpload = new FileUpload($val);
+            $fileUpload->run();
+            return $fileUpload;
+        }
 
         return $val;
     }

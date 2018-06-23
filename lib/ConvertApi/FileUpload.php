@@ -10,6 +10,11 @@ class FileUpload
         $this->fileName = $fileName ?: pathinfo($filePath, PATHINFO_BASENAME);
     }
 
+    function run()
+    {
+        $this->fileID = ConvertApi::client()->upload($this->filePath, $this->fileName);
+    }
+
     function __toString()
     {
         return $this->getFileID();
@@ -17,19 +22,11 @@ class FileUpload
 
     function getFileID()
     {
-        if (!isset($this->fileID))
-            $this->fileID = $this->upload();
-
         return $this->fileID;
     }
 
     function getFileName()
     {
         return $this->fileName;
-    }
-
-    private function upload()
-    {
-        return ConvertApi::client()->upload($this->filePath, $this->fileName);
     }
 }

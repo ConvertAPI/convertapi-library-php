@@ -43,7 +43,7 @@ class Client
         {
             $result = $this->execute($ch);
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
             fclose($fp);
             throw $e;
@@ -64,19 +64,18 @@ class Client
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$downloadTimeout);
 
-        try
-        {
-            curl_exec($ch);
-            curl_close($ch);
-        }
-        catch (Exception $e)
+        $response = curl_exec($ch);
+
+        if ($response === false)
         {
             fclose($fp);
             unlink($path);
-            throw $e;
+
+            $this->handleCurlError($ch);
         }
 
         fclose($fp);
+        curl_close($ch);
 
         return $path;
     }
@@ -88,8 +87,8 @@ class Client
         curl_setopt($ch, CURLOPT_URL, $this->url($path));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers ?: $this->defaultHeaders());
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $readTimeout ?: ConvertApi::$readTimeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, ConvertApi::$connectTimeout * 1000);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, ($readTimeout ?: ConvertApi::$readTimeout) * 1000);
         curl_setopt($ch, CURLOPT_ENCODING , 'gzip,deflate');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -131,13 +130,16 @@ class Client
     private function handleCurlError($ch)
     {
         $message = curl_error($ch);
+        $code = curl_errno($ch);
 
-        throw new Error\Client($message);
+        curl_close($ch);
+
+        throw new Error\Client($message, $code);
     }
 
     private function checkResponse($ch, $response)
     {
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);;
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($http_code == 200)
             return;

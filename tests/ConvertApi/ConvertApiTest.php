@@ -12,6 +12,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         // Save original values so that we can restore them after running tests
         $this->origApiSecret = ConvertApi::getApiSecret();
+        $this->origUploadTimeout = ConvertApi::$uploadTimeout;
 
         ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
     }
@@ -20,6 +21,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         // Restore original values
         ConvertApi::setApiSecret($this->origApiSecret);
+        ConvertApi::$uploadTimeout = $this->origUploadTimeout;
     }
 
     public function testConfigurationAccessors()
@@ -126,10 +128,27 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         try {
             ConvertApi::convert('pdf', $params, 'web', 0);
+
             $this->fail('Expected exception has not been raised.');
         } catch (\ConvertApi\Error\Api $e) {
             $this->assertContains('Parameter validation error.', $e->getMessage());
             $this->assertEquals(4000, $e->getCode());
+        }
+    }
+
+    public function testClientError()
+    {
+        ConvertApi::$uploadTimeout = 0.001;
+
+        $params = ['File' => 'examples/files/test.docx'];
+
+        try {
+            ConvertApi::convert('pdf', $params);
+
+            $this->fail('Expected exception has not been raised.');
+        } catch (\ConvertApi\Error\Client $e) {
+            $this->assertContains('timed out', $e->getMessage());
+            $this->assertEquals(28, $e->getCode());
         }
     }
 }
