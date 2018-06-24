@@ -95,26 +95,6 @@ class Client
         return $ch;
     }
 
-    private function buildFormData($params)
-    {
-        $data = [];
-
-        foreach ($params as $key => $val)
-        {
-            if (is_array($val))
-            {
-                foreach ($val as $k => $v)
-                    $data["${key}[${k}]"] = $v;
-            }
-            elseif (is_bool($val))
-                $data[$key] = $val ? 'true' : 'false';
-            else
-                $data[$key] = $val;
-        }
-
-        return $data;
-    }
-
     private function execute($ch)
     {
         $response = curl_exec($ch);
@@ -145,6 +125,8 @@ class Client
 
         if ($http_code == 200)
             return;
+
+        curl_close($ch);
 
         try
         {
@@ -181,5 +163,25 @@ class Client
     private function userAgent()
     {
         return 'convertapi-php-' . ConvertApi::VERSION;
+    }
+
+    private function buildFormData($params)
+    {
+        $data = [];
+
+        foreach ($params as $key => $val)
+        {
+            if (is_array($val))
+            {
+                foreach ($val as $k => $v)
+                    $data["${key}[${k}]"] = $v;
+            }
+            elseif (is_bool($val))
+                $data[$key] = $val ? 'true' : 'false';
+            else
+                $data[$key] = $val;
+        }
+
+        return $data;
     }
 }

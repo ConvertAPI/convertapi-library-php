@@ -4,6 +4,8 @@ namespace ConvertApi;
 
 class Task
 {
+    const DEFAULT_URL_FORMAT = 'url';
+
     function __construct($fromFormat, $toFormat, $params, $conversionTimeout = null)
     {
         $this->fromFormat = $fromFormat;
@@ -67,7 +69,7 @@ class Task
     private function detectFormat($params)
     {
         if (!empty($params['Url']))
-            return 'url';
+            return self::DEFAULT_URL_FORMAT;
 
         if (!empty($params['File']))
         {
