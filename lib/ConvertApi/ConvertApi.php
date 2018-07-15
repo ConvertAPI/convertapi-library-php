@@ -25,7 +25,7 @@ class ConvertApi
     public static $readTimeout = 60;
 
     // @var string Conversion timeout.
-    public static $conversionTimeout = 600;
+    public static $conversionTimeout = 180;
 
     // @var string Conversion timeout delta.
     public static $conversionTimeoutDelta = 10;
