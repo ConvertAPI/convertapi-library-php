@@ -162,7 +162,7 @@ class Client
 
     private function userAgent()
     {
-        return 'convertapi-php-' . ConvertApi::VERSION;
+        return 'ConvertAPI-PHP/' . ConvertApi::VERSION;
     }
 
     private function buildFormData($params)
