@@ -49,7 +49,7 @@ You can get your secret at https://www.convertapi.com/a
 ```php
 use \ConvertApi\ConvertApi;
 
-ConvertApi::setApiSecret('your api secret');
+ConvertApi::setApiSecret('your-api-secret');
 ```
 
 ### File conversion
@@ -125,7 +125,7 @@ You can find more advanced examples in the [examples/](examples) folder.
 Testing is done with PHPUnit:
 
 ```sh
-CONVERT_API_SECRET=your_api_secret ./bin/phpunit
+CONVERT_API_SECRET=your-api-secret ./bin/phpunit
 ```
 
 ## Contributing
