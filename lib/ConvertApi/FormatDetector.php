@@ -19,6 +19,6 @@ class FormatDetector
 
     private function path()
     {
-        return $this->resource;
+        return parse_url($this->resource, PHP_URL_PATH);
     }
 }

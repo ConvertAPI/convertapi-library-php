@@ -45,7 +45,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertWithFileUrl()
     {
-        $params = ['File' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
+        $params = ['File' => 'https://cdn.convertapi.com/cara/testfiles/document.docx?test=1'];
 
         $result = ConvertApi::convert('pdf', $params);
 
