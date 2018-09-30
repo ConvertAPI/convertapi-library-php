@@ -7,13 +7,7 @@ class FileUpload
     function __construct($filePath, $fileName = null)
     {
         $this->filePath = $filePath;
-        $this->fileName = $fileName ?: pathinfo($filePath, PATHINFO_BASENAME);
-    }
-
-    function run()
-    {
-        if (!isset($this->fileID))
-            $this->fileID = ConvertApi::client()->upload($this->filePath, $this->fileName);
+        $this->_fileName = $fileName ?: pathinfo($filePath, PATHINFO_BASENAME);
     }
 
     function __toString()
@@ -23,11 +17,19 @@ class FileUpload
 
     function getFileID()
     {
-        return $this->fileID;
+        return $this->result()['FileId'];
     }
 
-    function getFileName()
+    function getFileExt()
     {
-        return $this->fileName;
+        return $this->result()['FileExt'];
+    }
+
+    private function result()
+    {
+        if (!isset($this->_result))
+            $this->_result = ConvertApi::client()->upload($this->filePath, $this->_fileName);
+
+        return $this->_result;
     }
 }
