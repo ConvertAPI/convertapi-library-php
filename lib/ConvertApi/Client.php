@@ -51,7 +51,7 @@ class Client
 
         fclose($fp);
 
-        return $result['FileId'];
+        return $result;
     }
 
     public function download($url, $path)

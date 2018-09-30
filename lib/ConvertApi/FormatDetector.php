@@ -11,14 +11,14 @@ class FormatDetector
 
     function run()
     {
+        if (is_a($this->resource, '\ConvertApi\FileUpload'))
+            return $this->resource->getFileExt();
+
         return pathinfo($this->path(), PATHINFO_EXTENSION);
     }
 
     private function path()
     {
-        if (is_a($this->resource, '\ConvertApi\FileUpload'))
-            return $this->resource->getFileName();
-
         return $this->resource;
     }
 }
