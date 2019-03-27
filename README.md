@@ -118,7 +118,7 @@ echo $info['SecondsLeft'];
 
 ### More examples
 
-You can find more advanced examples in the [examples/](examples) folder.
+You can find more advanced examples in the [examples/](https://github.com/ConvertAPI/convertapi-php/tree/master/examples) folder.
 
 ## Development
 
