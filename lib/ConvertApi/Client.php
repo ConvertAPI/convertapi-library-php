@@ -63,6 +63,7 @@ class Client
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, ConvertApi::$connectTimeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, ConvertApi::$downloadTimeout);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
         $response = curl_exec($ch);
 
