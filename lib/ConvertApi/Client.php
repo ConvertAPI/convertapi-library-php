@@ -35,6 +35,11 @@ class Client
         $ch = $this->initCurl('upload', ConvertApi::$uploadTimeout, $headers);
         $fp = fopen($file, 'rb');
 
+        if (!$fp)
+        {
+            throw new Error\File("Unable to open file ${file}");
+        }
+
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_INFILE, $fp);
         curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));
@@ -58,6 +63,11 @@ class Client
     {
         $ch = curl_init($url);
         $fp = fopen($path, 'wb');
+
+        if (!$fp)
+        {
+            throw new Error\File("Unable to open file ${path}");
+        }
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent());
