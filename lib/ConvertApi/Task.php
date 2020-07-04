@@ -26,7 +26,8 @@ class Task
 
         $fromFormat = $this->fromFormat ?: $this->detectFormat($params);
         $readTimeout = $this->conversionTimeout + ConvertApi::$conversionTimeoutDelta;
-        $path = 'convert/' . $fromFormat . '/to/' . $this->toFormat;
+        $converter = $params['converter'] ? "/converter/{$params['converter']}" : '';
+        $path = 'convert/' . $fromFormat . '/to/' . $this->toFormat . $converter;
 
         $response = ConvertApi::client()->post($path, $params, $readTimeout);
 
