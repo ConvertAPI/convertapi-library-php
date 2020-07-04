@@ -7,7 +7,7 @@ use \ConvertApi\ConvertApi;
 ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
 
 # Example of saving Word docx to PDF using OpenOffice converter
- # https://www.convertapi.com/doc-to-pdf/openofficetopdf
+# https://www.convertapi.com/doc-to-pdf/openoffice
 
 $dir = sys_get_temp_dir();
 $upload = new \ConvertApi\FileUpload('files/test.docx');
