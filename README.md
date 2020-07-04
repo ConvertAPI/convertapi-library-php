@@ -5,7 +5,7 @@
 
 ## Convert your files with our online file conversion API
 
-The ConvertAPI helps converting various file formats. Creating PDF and Images from various sources like Word, Excel, Powerpoint, images, web pages or raw HTML codes. Merge, Encrypt, Split, Repair and Decrypt PDF files. And many others files manipulations. In just few minutes you can integrate it into your application and use it easily.
+ConvertAPI helps in converting various file formats. Creating PDF and Images from various sources like Word, Excel, Powerpoint, images, web pages or raw HTML codes. Merge, Encrypt, Split, Repair and Decrypt PDF files and many other file manipulations. You can integrate it into your application in just a few minutes and use it easily.
 
 ## Requirements
 
@@ -25,7 +25,7 @@ composer require convertapi/convertapi-php
 
 ### Manual Installation
 
-If you do not wish to use Composer, you must require ConvertApi autoloader:
+If you do not wish to use the Composer, you must require ConvertApi autoloader:
 
 ```php
 require_once('/path/to/convertapi-php/src/ConvertApi/autoload.php');
@@ -54,7 +54,7 @@ ConvertApi::setApiSecret('your-api-secret');
 
 ### File conversion
 
-Example to convert file to PDF. All supported formats and options can be found
+Convert file to PDF example. All supported formats and options can be found
 [here](https://www.convertapi.com).
 
 ```php
@@ -92,7 +92,7 @@ $result = ConvertApi::convert(
 
 #### Additional conversion parameters
 
-ConvertAPI accepts extra conversion parameters depending on converted formats. All conversion
+ConvertAPI accepts additional conversion parameters depending on selected formats. All conversion
 parameters and explanations can be found [here](https://www.convertapi.com).
 
 ```php
@@ -108,7 +108,7 @@ $result = ConvertApi::convert(
 
 ### User information
 
-You can always check remaining seconds amount by fetching [user information](https://www.convertapi.com/doc/user).
+You can always check your remaining seconds amount programmatically by fetching [user information](https://www.convertapi.com/doc/user).
 
 ```php
 $info = ConvertApi::getUser();
@@ -118,7 +118,7 @@ echo $info['SecondsLeft'];
 
 ### More examples
 
-You can find more advanced examples in the [examples/](https://github.com/ConvertAPI/convertapi-php/tree/master/examples) folder.
+Find more advanced examples in the [examples/](https://github.com/ConvertAPI/convertapi-php/tree/master/examples) folder.
 
 ## Development
 
