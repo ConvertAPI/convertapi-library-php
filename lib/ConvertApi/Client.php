@@ -21,7 +21,7 @@ class Client
         return $this->execute($ch);
     }
 
-    public function upload($file, $fileName)
+    public function upload($file_or_resource, $fileName)
     {
         $headers = array_merge(
             $this->defaultHeaders(),
@@ -33,16 +33,22 @@ class Client
         );
 
         $ch = $this->initCurl('upload', ConvertApi::$uploadTimeout, $headers);
-        $fp = fopen($file, 'rb');
+
+        if (is_resource($file_or_resource)) {
+            $fp = $file_or_resource;
+        } else {
+            $fp = fopen($file_or_resource, 'rb');
+            
+            curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file_or_resource));
+        }
 
         if (!$fp)
         {
-            throw new Error\File("Unable to open file ${file}");
+            throw new Error\File("Unable to open file ${file_or_resource}");
         }
 
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_INFILE, $fp);
-        curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));
+        curl_setopt($ch, CURLOPT_INFILE, $fp);            
 
         try
         {

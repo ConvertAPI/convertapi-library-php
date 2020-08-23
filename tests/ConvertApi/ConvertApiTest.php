@@ -89,6 +89,17 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
     }
 
+    public function testConvertWithFileResourceUpload()
+    {
+        $fp = fopen('examples/files/test.docx', 'rb');
+        $fileUpload = new \ConvertApi\FileUpload($fp, 'custom.docx');
+        $params = ['File' => $fileUpload];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
+    }
+
     public function testConvertWithSpecifiedSourceFormatAndTimeout()
     {
         $params = ['Url' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
