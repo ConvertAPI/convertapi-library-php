@@ -19,13 +19,16 @@ class Task
         $params = array_merge(
             $this->normalizedParams(),
             [
-                'Timeout' => $this->conversionTimeout,
                 'StoreFile' => true,
             ]
         );
 
+        if ($this->conversionTimeout) {
+            $params['Timeout'] = $this->conversionTimeout;
+            $readTimeout = $this->conversionTimeout + ConvertApi::$conversionTimeoutDelta;
+        }
+
         $fromFormat = $this->fromFormat ?: $this->detectFormat($params);
-        $readTimeout = $this->conversionTimeout + ConvertApi::$conversionTimeoutDelta;
         $converter = isset($params['converter']) ? "/converter/{$params['converter']}" : '';
         $path = 'convert/' . $fromFormat . '/to/' . $this->toFormat . $converter;
 

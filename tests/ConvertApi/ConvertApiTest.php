@@ -144,10 +144,8 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
     public function testApiError()
     {
-        $params = ['Url' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];
-
         try {
-            ConvertApi::convert('pdf', $params, 'web', 600);
+            ConvertApi::convert('pdf', []);
 
             $this->fail('Expected exception has not been raised.');
         } catch (\ConvertApi\Error\Api $e) {

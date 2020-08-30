@@ -25,16 +25,16 @@ class ConvertApi
     public static $readTimeout = 60;
 
     // @var string Conversion timeout.
-    public static $conversionTimeout = 180;
+    public static $conversionTimeout;
 
     // @var string Conversion timeout delta.
     public static $conversionTimeoutDelta = 10;
 
     // @var string File upload timeout.
-    public static $uploadTimeout = 600;
+    public static $uploadTimeout = 1800;
 
     // @var string File download timeout.
-    public static $downloadTimeout = 600;
+    public static $downloadTimeout = 1800;
 
     // @var static \ConvertApi\Client
     private static $_client;
