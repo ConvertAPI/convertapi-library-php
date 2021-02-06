@@ -64,7 +64,7 @@ $result = ConvertApi::convert('pdf', ['File' => '/path/to/my_file.docx']);
 $result->getFile()->save('/path/to/save/file.pdf');
 
 # get file contents (without saving the file locally)
-$content = $result->getFile()->getContents();
+$contents = $result->getFile()->getContents();
 ```
 
 Other result operations:
