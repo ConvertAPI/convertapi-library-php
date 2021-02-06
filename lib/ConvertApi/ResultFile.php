@@ -34,6 +34,16 @@ class ResultFile
     }
 
     /**
+     * @return string Converted file contents
+     */
+    function getContents()
+    {
+        $context = stream_context_create(array('http' => array('protocol_version' => '1.1')));
+
+        return file_get_contents($this->getUrl(), false, $context);
+    }
+
+    /**
      * Save file to path
      *
      * @return string Saved file path

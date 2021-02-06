@@ -59,6 +59,8 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         foreach ($files as $file)
             unlink($file);
+
+        $this->assertInternalType('string', $result->getFile()->getContents());
     }
 
     public function testConvertWithFilePath()
