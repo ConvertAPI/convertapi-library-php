@@ -28,6 +28,9 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         ConvertApi::setApiSecret('test-secret');
         $this->assertEquals('test-secret', ConvertApi::getApiSecret());
+
+        ConvertApi::setApiSecret('https://foo.bar');
+        $this->assertEquals('https://foo.bar', ConvertApi::getApiBase());
     }
 
     public function testClient()

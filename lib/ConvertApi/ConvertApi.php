@@ -58,6 +58,24 @@ class ConvertApi
     }
 
     /**
+     * @return string The API base used for requests.
+     */
+    public static function getApiBase()
+    {
+        return self::$apiBase;
+    }
+
+    /**
+     * Sets API base used for requests.
+     *
+     * @param string $apiBase
+     */
+    public static function setApiBase($apiBase)
+    {
+        self::$apiBase = $apiBase;
+    }
+
+    /**
      * Perform conversion
      *
      * @param string $toFormat Convert to format
