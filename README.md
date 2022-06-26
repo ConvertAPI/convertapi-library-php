@@ -1,7 +1,7 @@
 # ConvertAPI PHP Client
 
 [![PHP version](https://badge.fury.io/ph/convertapi%2Fconvertapi-php.svg)](https://packagist.org/packages/convertapi/convertapi-php)
-[![Build Status](https://secure.travis-ci.org/ConvertAPI/convertapi-php.svg)](http://travis-ci.org/ConvertAPI/convertapi-php)
+[![Build Status](https://github.com/ConvertAPI/convertapi-php/actions/workflows/main.yml/badge.svg)](https://github.com/ConvertAPI/convertapi-php/actions)
 
 ## Convert your files with our online file conversion API
 
