@@ -117,7 +117,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
             'Files' => ['examples/files/test.pdf', 'examples/files/test.pdf']
         ];
 
-        $result = ConvertApi::convert('zip', $params);
+        $result = ConvertApi::convert('zip', $params, 'any');
 
         $this->assertEquals('test.zip', $result->getFile()->getFileName());
     }
@@ -126,7 +126,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         $params = ['Url' => 'https://www.convertapi.com'];
 
-        $result = ConvertApi::convert('pdf', $params);
+        $result = ConvertApi::convert('pdf', $params, 'web');
 
         $this->assertInternalType('int', $result->getFile()->getFileSize());
     }
@@ -139,7 +139,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $params = ['Files' => $result->getFiles()];
 
-        $result = ConvertApi::convert('zip', $params);
+        $result = ConvertApi::convert('zip', $params, 'any');
 
         $this->assertEquals('test.zip', $result->getFile()->getFileName());
     }
