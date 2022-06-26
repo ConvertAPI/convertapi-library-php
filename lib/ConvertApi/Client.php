@@ -137,6 +137,9 @@ class Client
 
     private function checkResponse($ch, $response)
     {
+        if (empty($response))
+            throw new Error\Api('API response is empty');
+
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($http_code == 200)
