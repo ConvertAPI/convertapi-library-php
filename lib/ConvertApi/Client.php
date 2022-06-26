@@ -28,7 +28,7 @@ class Client
             [
                 'Content-Type: application/octet-stream',
                 'Transfer-Encoding: chunked',
-                "Content-Disposition: attachment; filename*=UTF-8''" . urlencode($fileName),
+                "Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($fileName),
             ]
         );
 

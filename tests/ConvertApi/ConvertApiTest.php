@@ -96,6 +96,16 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
     }
 
+    public function testConvertWithFileUploadAndSpaces()
+    {
+        $fileUpload = new \ConvertApi\FileUpload('examples/files/test.docx', 'test space ačiū.docx');
+        $params = ['File' => $fileUpload];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $this->assertEquals('test space ačiū.pdf', $result->getFile()->getFileName());
+    }
+
     public function testConvertWithFileResourceUpload()
     {
         $fp = fopen('examples/files/test.docx', 'rb');
