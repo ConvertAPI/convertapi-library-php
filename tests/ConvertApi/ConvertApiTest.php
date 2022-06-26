@@ -12,6 +12,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         // Save original values so that we can restore them after running tests
         $this->origApiSecret = ConvertApi::getApiSecret();
+        $this->origApiBase = ConvertApi::getApiBase();
         $this->origUploadTimeout = ConvertApi::$uploadTimeout;
 
         ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
@@ -21,6 +22,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     {
         // Restore original values
         ConvertApi::setApiSecret($this->origApiSecret);
+        ConvertApi::setApiBase($this->origApiBase);
         ConvertApi::$uploadTimeout = $this->origUploadTimeout;
     }
 
@@ -29,7 +31,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         ConvertApi::setApiSecret('test-secret');
         $this->assertEquals('test-secret', ConvertApi::getApiSecret());
 
-        ConvertApi::setApiSecret('https://foo.bar');
+        ConvertApi::setApiBase('https://foo.bar');
         $this->assertEquals('https://foo.bar', ConvertApi::getApiBase());
     }
 
