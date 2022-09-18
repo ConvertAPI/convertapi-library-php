@@ -27,7 +27,7 @@ class Task
             $params['Timeout'] = $this->conversionTimeout;
             $readTimeout = $this->conversionTimeout + ConvertApi::$conversionTimeoutDelta;
         } else {
-            $readTimeout = null;
+            $readTimeout = ConvertApi::$readTimeout;
         }
 
         $fromFormat = $this->fromFormat ?: $this->detectFormat($params);

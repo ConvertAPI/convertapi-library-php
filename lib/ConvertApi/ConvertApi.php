@@ -22,7 +22,7 @@ class ConvertApi
     public static $connectTimeout = 5;
 
     // @var string HTTP read timeout.
-    public static $readTimeout = 60;
+    public static $readTimeout = 1800;
 
     // @var string Conversion timeout.
     public static $conversionTimeout;
