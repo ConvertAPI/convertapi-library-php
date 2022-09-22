@@ -55,7 +55,7 @@ ConvertApi::setApiSecret('your-api-secret');
 ### File conversion
 
 Convert file to PDF example. All supported formats and options can be found
-[here](https://www.convertapi.com).
+[here](https://www.convertapi.com/conversions).
 
 ```php
 $result = ConvertApi::convert('pdf', ['File' => '/path/to/my_file.docx']);
