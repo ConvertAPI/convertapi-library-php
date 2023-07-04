@@ -119,6 +119,14 @@ $info = ConvertApi::getUser();
 echo $info['SecondsLeft'];
 ```
 
+### Alternative domain
+
+Use `setApiBase` method to set alternative service domain. Dedicated to the region [domain list](https://www.convertapi.com/doc/servers-location).
+
+```php
+ConvertApi::setApiBase('https://eu-v2.convertapi.com/');
+```
+
 ### More examples
 
 Find more advanced examples in the [examples/](https://github.com/ConvertAPI/convertapi-php/tree/master/examples) folder.
