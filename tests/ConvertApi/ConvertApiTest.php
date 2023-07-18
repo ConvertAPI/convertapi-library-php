@@ -159,6 +159,18 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test.zip', $result->getFile()->getFileName());
     }
 
+    public function testCompare()
+    {
+        $params = [
+            'File' => 'examples/files/test.docx',
+            'CompareFile' => 'examples/files/test.docx'
+        ];
+
+        $result = ConvertApi::convert('compare', $params);
+
+        $this->assertEquals('test.docx', $result->getFile()->getFileName());
+    }
+
     public function testApiError()
     {
         $params = ['Url' => 'https://www.w3.org/TR/PNG/iso_8859-1.txt'];

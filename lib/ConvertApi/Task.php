@@ -46,12 +46,12 @@ class Task
 
         foreach ($this->params as $key => $val)
         {
-            switch($key) {
-                case 'File':
+            switch(true) {
+                case $key != 'StoreFile' && preg_match('/File$/', $key):
                     $result[$key] = FileParam::build($val);
                     break;
 
-                case 'Files':
+                case $key == 'Files':
                     $result[$key] = $this->filesBatch($val);
                     break;
 
