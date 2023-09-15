@@ -4,7 +4,7 @@ namespace ConvertApi;
 
 class Result
 {
-    private $files;
+    private ?array $files = null;
 
     function __construct($response)
     {

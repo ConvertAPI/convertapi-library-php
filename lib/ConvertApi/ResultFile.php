@@ -38,7 +38,7 @@ class ResultFile
      */
     function getContents()
     {
-        $context = stream_context_create(array('http' => array('protocol_version' => '1.1')));
+        $context = stream_context_create(['http' => ['protocol_version' => '1.1']]);
 
         return file_get_contents($this->getUrl(), false, $context);
     }

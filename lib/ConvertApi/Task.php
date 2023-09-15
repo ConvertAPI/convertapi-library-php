@@ -4,7 +4,7 @@ namespace ConvertApi;
 
 class Task
 {
-    const DEFAULT_URL_FORMAT = 'url';
+    final public const DEFAULT_URL_FORMAT = 'url';
 
     function __construct($fromFormat, $toFormat, $params, $conversionTimeout = null)
     {
@@ -46,18 +46,11 @@ class Task
 
         foreach ($this->params as $key => $val)
         {
-            switch(true) {
-                case $key != 'StoreFile' && preg_match('/File$/', $key):
-                    $result[$key] = FileParam::build($val);
-                    break;
-
-                case $key == 'Files':
-                    $result[$key] = $this->filesBatch($val);
-                    break;
-
-                default:
-                    $result[$key] = $val;
-            }
+            $result[$key] = match (true) {
+                $key != 'StoreFile' && preg_match('/File$/', (string) $key) => FileParam::build($val),
+                $key == 'Files' => $this->filesBatch($val),
+                default => $val,
+            };
         }
 
         return $result;

@@ -29,23 +29,23 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
     public function testConfigurationAccessors()
     {
         ConvertApi::setApiSecret('test-secret');
-        $this->assertEquals('test-secret', ConvertApi::getApiSecret());
+        static::assertEquals('test-secret', ConvertApi::getApiSecret());
 
         ConvertApi::setApiBase('https://foo.bar');
-        $this->assertEquals('https://foo.bar', ConvertApi::getApiBase());
+        static::assertEquals('https://foo.bar', ConvertApi::getApiBase());
     }
 
     public function testClient()
     {
-        $this->assertInstanceOf('\ConvertApi\Client', ConvertApi::client());
+        static::assertInstanceOf('\\' . \ConvertApi\Client::class, ConvertApi::client());
     }
 
     public function testGetUser()
     {
         $user_info = ConvertApi::getUser();
 
-        $this->assertInternalType('array', $user_info);
-        $this->assertArrayHasKey('SecondsLeft', $user_info);
+        static::assertInternalType('array', $user_info);
+        static::assertArrayHasKey('SecondsLeft', $user_info);
     }
 
     public function testConvertWithFileUrl()
@@ -54,18 +54,18 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertInstanceOf('\ConvertApi\Result', $result);
+        static::assertInstanceOf('\\' . \ConvertApi\Result::class, $result);
 
-        $this->assertInternalType('int', $result->getConversionCost());
+        static::assertInternalType('int', $result->getConversionCost());
 
         $files = $result->saveFiles(sys_get_temp_dir());
 
-        $this->assertFileExists($files[0]);
+        static::assertFileExists($files[0]);
 
         foreach ($files as $file)
             unlink($file);
 
-        $this->assertInternalType('string', $result->getFile()->getContents());
+        static::assertInternalType('string', $result->getFile()->getContents());
     }
 
     public function testConvertWithFilePath()
@@ -74,7 +74,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertEquals('test.pdf', $result->getFile()->getFileName());
+        static::assertEquals('test.pdf', $result->getFile()->getFileName());
     }
 
     public function testConvertWithAltnativeConverter()
@@ -83,7 +83,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertEquals('test.pdf', $result->getFile()->getFileName());
+        static::assertEquals('test.pdf', $result->getFile()->getFileName());
     }
 
     public function testConvertWithFileUpload()
@@ -93,7 +93,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
+        static::assertEquals('custom.pdf', $result->getFile()->getFileName());
     }
 
     public function testConvertWithFileUploadAndSpaces()
@@ -103,7 +103,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertEquals('test space ačiū.pdf', $result->getFile()->getFileName());
+        static::assertEquals('test space ačiū.pdf', $result->getFile()->getFileName());
     }
 
     public function testConvertWithFileResourceUpload()
@@ -114,7 +114,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params);
 
-        $this->assertEquals('custom.pdf', $result->getFile()->getFileName());
+        static::assertEquals('custom.pdf', $result->getFile()->getFileName());
     }
 
     public function testConvertWithSpecifiedSourceFormatAndTimeout()
@@ -123,7 +123,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params, 'web', 100);
 
-        $this->assertInternalType('int', $result->getFile()->getFileSize());
+        static::assertInternalType('int', $result->getFile()->getFileSize());
     }
 
     public function testConvertWithMultipleFiles()
@@ -134,7 +134,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('zip', $params, 'any');
 
-        $this->assertEquals('test.zip', $result->getFile()->getFileName());
+        static::assertEquals('test.zip', $result->getFile()->getFileName());
     }
 
     public function testConvertWithUrl()
@@ -143,7 +143,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('pdf', $params, 'web');
 
-        $this->assertInternalType('int', $result->getFile()->getFileSize());
+        static::assertInternalType('int', $result->getFile()->getFileSize());
     }
 
     public function testChainedConversion()
@@ -156,7 +156,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('zip', $params, 'any');
 
-        $this->assertEquals('test.zip', $result->getFile()->getFileName());
+        static::assertEquals('test.zip', $result->getFile()->getFileName());
     }
 
     public function testCompare()
@@ -168,7 +168,7 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
 
         $result = ConvertApi::convert('compare', $params);
 
-        $this->assertEquals('test.docx', $result->getFile()->getFileName());
+        static::assertEquals('test.docx', $result->getFile()->getFileName());
     }
 
     public function testApiError()
@@ -178,10 +178,10 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         try {
             ConvertApi::convert('pdf', $params, 'web', -10);
 
-            $this->fail('Expected exception has not been raised.');
+            static::fail('Expected exception has not been raised.');
         } catch (\ConvertApi\Error\Api $e) {
-            $this->assertContains('Parameter validation error.', $e->getMessage());
-            $this->assertEquals(4000, $e->getCode());
+            static::assertContains('Parameter validation error.', $e->getMessage());
+            static::assertEquals(4000, $e->getCode());
         }
     }
 
@@ -194,10 +194,10 @@ class ConvertApiTest extends \PHPUnit_Framework_TestCase
         try {
             ConvertApi::convert('pdf', $params);
 
-            $this->fail('Expected exception has not been raised.');
+            static::fail('Expected exception has not been raised.');
         } catch (\ConvertApi\Error\Client $e) {
-            $this->assertContains('timed out', $e->getMessage());
-            $this->assertEquals(28, $e->getCode());
+            static::assertContains('timed out', $e->getMessage());
+            static::assertEquals(28, $e->getCode());
         }
     }
 }

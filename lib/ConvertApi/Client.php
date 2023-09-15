@@ -28,7 +28,7 @@ class Client
             [
                 'Content-Type: application/octet-stream',
                 'Transfer-Encoding: chunked',
-                "Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($fileName),
+                "Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode((string) $fileName),
             ]
         );
 
@@ -44,7 +44,7 @@ class Client
 
         if (!$fp)
         {
-            throw new Error\File("Unable to open file ${file_or_resource}");
+            throw new Error\File("Unable to open file {$file_or_resource}");
         }
 
         curl_setopt($ch, CURLOPT_POST, true);
@@ -72,7 +72,7 @@ class Client
 
         if (!$fp)
         {
-            throw new Error\File("Unable to open file ${path}");
+            throw new Error\File("Unable to open file {$path}");
         }
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -125,7 +125,7 @@ class Client
         return $this->parseResponse($response);
     }
 
-    private function handleCurlError($ch)
+    private function handleCurlError($ch): never
     {
         $message = curl_error($ch);
         $code = curl_errno($ch);
@@ -151,7 +151,7 @@ class Client
         {
             $json = $this->parseResponse($response);
         }
-        catch (\Exception $e)
+        catch (\Exception)
         {
             throw new Error\Api($response);
         }
@@ -159,14 +159,14 @@ class Client
         $message = $json['Message'] . ' Code: ' . $json['Code'];
 
         if (!empty($json['InvalidParameters']))
-            $message .= ' '. json_encode($json['InvalidParameters']);
+            $message .= ' '. json_encode($json['InvalidParameters'], JSON_THROW_ON_ERROR);
 
         throw new Error\Api($message, $json['Code']);
     }
 
     private function parseResponse($response)
     {
-        return json_decode($response, true);
+        return json_decode((string) $response, true, 512, JSON_THROW_ON_ERROR);
     }
 
     private function url($path)
@@ -193,7 +193,7 @@ class Client
             if (is_array($val))
             {
                 foreach ($val as $k => $v)
-                    $data["${key}[${k}]"] = $v;
+                    $data["{$key}[{$k}]"] = $v;
             }
             elseif (is_bool($val))
                 $data[$key] = $val ? 'true' : 'false';

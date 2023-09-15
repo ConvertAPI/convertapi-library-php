@@ -2,17 +2,17 @@
 
 namespace ConvertApi;
 
-class FileUpload
+class FileUpload implements \Stringable
 {
     function __construct($filePath, $fileName = null)
     {
         $this->filePath = $filePath;
-        $this->_fileName = $fileName ?: pathinfo($filePath, PATHINFO_BASENAME);
+        $this->_fileName = $fileName ?: pathinfo((string) $filePath, PATHINFO_BASENAME);
     }
 
-    function __toString()
+    function __toString(): string
     {
-        return $this->getFileID();
+        return (string) $this->getFileID();
     }
 
     function getFileID()
