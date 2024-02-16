@@ -77,6 +77,15 @@ class ConvertApiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test.pdf', $result->getFile()->getFileName());
     }
 
+    public function testConvertWithStoreFileFalse()
+    {
+        $params = ['File' => 'examples/files/test.docx', 'StoreFile' => false];
+
+        $result = ConvertApi::convert('pdf', $params);
+
+        $this->assertEquals('test.pdf', $result->getFile()->getFileName());
+    }
+
     public function testConvertWithAltnativeConverter()
     {
         $params = ['File' => 'examples/files/test.docx', 'converter' => 'openoffice'];

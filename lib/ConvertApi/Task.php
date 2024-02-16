@@ -21,11 +21,11 @@ class Task
 
     function run()
     {
-        $params = array_merge(
-            $this->normalizedParams(),
+        $params = array_replace(
             [
                 'StoreFile' => true,
-            ]
+            ],
+            $this->normalizedParams()
         );
 
         if ($this->conversionTimeout) {
