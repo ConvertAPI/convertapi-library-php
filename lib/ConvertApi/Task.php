@@ -6,6 +6,11 @@ class Task
 {
     const DEFAULT_URL_FORMAT = 'url';
 
+    private ?string $fromFormat;
+    private ?string $toFormat;
+    private array $params;
+    private ?int $conversionTimeout;
+
     function __construct($fromFormat, $toFormat, $params, $conversionTimeout = null)
     {
         $this->fromFormat = $fromFormat;

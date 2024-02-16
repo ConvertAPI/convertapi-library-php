@@ -9,7 +9,7 @@ ConvertAPI helps in converting various file formats. Creating PDF and Images fro
 
 ## Requirements
 
-PHP 5.4.0 and later.
+PHP 8.1.0 and later.
 
 ## Installation
 

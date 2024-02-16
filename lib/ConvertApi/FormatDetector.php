@@ -4,6 +4,8 @@ namespace ConvertApi;
 
 class FormatDetector
 {
+    private $resource;
+
     function __construct($resource)
     {
         $this->resource = $resource;

@@ -4,6 +4,10 @@ namespace ConvertApi;
 
 class FileUpload
 {
+    public $filePath;
+    private string $_fileName;
+    private array $_result;
+
     function __construct($filePath, $fileName = null)
     {
         $this->filePath = $filePath;
