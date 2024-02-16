@@ -28,7 +28,7 @@ composer require convertapi/convertapi-php
 If you do not wish to use the Composer, you must require ConvertApi autoloader:
 
 ```php
-require_once('/path/to/convertapi-php/src/ConvertApi/autoload.php');
+require_once('/path/to/convertapi-php/lib/ConvertApi/autoload.php');
 ```
 
 ## Dependencies
