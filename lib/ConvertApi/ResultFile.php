@@ -4,6 +4,8 @@ namespace ConvertApi;
 
 class ResultFile
 {
+    public array $fileInfo;
+
     function __construct($fileInfo)
     {
         $this->fileInfo = $fileInfo;
