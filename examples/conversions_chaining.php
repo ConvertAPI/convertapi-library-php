@@ -18,14 +18,14 @@ $jpgResult = ConvertApi::convert('jpg', ['File' => 'files/test.pdf']);
 $cost = $jpgResult->getConversionCost();
 $count = count($jpgResult->getFiles());
 
-echo "Conversions done. Cost: ${cost}. Total files created: ${count}\n";
+echo "Conversions done. Cost: {$cost}. Total files created: {$count}\n";
 
 $zipResult = ConvertApi::convert('zip', ['Files' => $jpgResult->getFiles()], 'any');
 
 $cost = $zipResult->getConversionCost();
 $count = count($zipResult->getFiles());
 
-echo "Conversions done. Cost: ${cost}. Total files created: ${count}\n";
+echo "Conversions done. Cost: {$cost}. Total files created: {$count}\n";
 
 $savedFiles = $zipResult->saveFiles($dir);
 

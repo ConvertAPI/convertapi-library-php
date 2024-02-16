@@ -44,7 +44,7 @@ class Client
 
         if (!$fp)
         {
-            throw new Error\File("Unable to open file ${file_or_resource}");
+            throw new Error\File("Unable to open file {$file_or_resource}");
         }
 
         curl_setopt($ch, CURLOPT_POST, true);
@@ -72,7 +72,7 @@ class Client
 
         if (!$fp)
         {
-            throw new Error\File("Unable to open file ${path}");
+            throw new Error\File("Unable to open file {$path}");
         }
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -193,7 +193,7 @@ class Client
             if (is_array($val))
             {
                 foreach ($val as $k => $v)
-                    $data["${key}[${k}]"] = $v;
+                    $data["{$key}[{$k}]"] = $v;
             }
             elseif (is_bool($val))
                 $data[$key] = $val ? 'true' : 'false';
