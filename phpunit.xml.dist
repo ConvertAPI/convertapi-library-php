@@ -1,13 +1,21 @@
-<phpunit bootstrap="vendor/autoload.php" colors="true">
-    <testsuites>
-        <testsuite name="ConvertApi Test Suite">
-            <directory suffix="Test.php">./tests/ConvertApi/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./lib/ConvertApi/</directory>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+  bootstrap="vendor/autoload.php"
+  displayDetailsOnTestsThatTriggerDeprecations="true"
+  displayDetailsOnTestsThatTriggerErrors="true"
+  displayDetailsOnTestsThatTriggerNotices="true"
+  displayDetailsOnTestsThatTriggerWarnings="true"
+>
+  <testsuites>
+    <testsuite name="ConvertApi Test Suite">
+      <directory suffix="Test.php">./tests/ConvertApi/</directory>
+    </testsuite>
+  </testsuites>
+  <source restrictDeprecations="true">
+    <include>
+      <directory suffix=".php">./lib/ConvertApi/</directory>
+    </include>
+  </source>
 </phpunit>

@@ -7,6 +7,8 @@ Icon
 .Spotlight-V100
 .Trashes
 *.sublime-*
+.phpunit.result.cache
+.env
 vendor
 composer.lock
 bin
