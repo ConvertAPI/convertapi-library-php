@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="vendor/autoload.php" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
+<phpunit 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+  bootstrap="vendor/autoload.php"
+>
   <testsuites>
     <testsuite name="ConvertApi Test Suite">
       <directory suffix="Test.php">./tests/ConvertApi/</directory>
     </testsuite>
   </testsuites>
-  <source>
+  <source restrictDeprecations="true">
     <include>
       <directory suffix=".php">./lib/ConvertApi/</directory>
     </include>
