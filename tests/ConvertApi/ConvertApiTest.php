@@ -48,6 +48,37 @@ class ConvertApiTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('SecondsLeft', $user_info);
     }
 
+    public function testUploadFile()
+    {
+        $file = 'examples/files/test.docx';
+
+        $fileContents = file_get_contents($file);
+        $crc = hash('crc32b', $fileContents);
+
+        $result = ConvertApi::client()->upload($file, 'test.docx');
+        $uploadedContents = file_get_contents($result['Url']);
+        $uploadedCrc = hash('crc32b', $uploadedContents);
+
+        $this->assertEquals($crc, $uploadedCrc);
+    }
+
+    public function testUploadStream()
+    {
+        $file = 'examples/files/test.docx';
+        $fileContents = file_get_contents($file);
+        $crc = hash('crc32b', $fileContents);
+
+        $stream = fopen('php://memory', 'rwb');
+        fwrite($stream, $fileContents);
+        rewind($stream);
+
+        $result = ConvertApi::client()->upload($stream, 'test.docx');
+        $uploadedContents = file_get_contents($result['Url']);
+        $uploadedCrc = hash('crc32b', $uploadedContents);
+
+        $this->assertEquals($crc, $uploadedCrc);
+    }
+
     public function testConvertWithFileUrl()
     {
         $params = ['File' => 'https://cdn.convertapi.com/cara/testfiles/document.docx?test=1'];

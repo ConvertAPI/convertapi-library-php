@@ -26,8 +26,6 @@ class Client
         $headers = array_merge(
             $this->defaultHeaders(),
             [
-                'Content-Type: application/octet-stream',
-                'Transfer-Encoding: chunked',
                 "Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($fileName),
             ]
         );
