@@ -10,7 +10,7 @@ namespace ConvertApi;
 class ConvertApi
 {
     // ConvertAPI client version.
-    const VERSION = '2.0.0';
+    const VERSION = '2.0.1';
 
     // @var string The Convert API secret. You can get your secret at https://www.convertapi.com/a
     public static $apiSecret;
