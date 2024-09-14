@@ -169,12 +169,15 @@ class Client
 
     private function url($path)
     {
-        return ConvertApi::$apiBase . $path . '?secret=' . ConvertApi::getApiSecret();
+        return ConvertApi::$apiBase . $path;
     }
 
     private function defaultHeaders()
     {
-        return ['Accept: application/json'];
+        return [
+            'Accept: application/json',
+            'Authorization: Bearer ' . ConvertApi::getApiCredentials(),
+        ];
     }
 
     private function userAgent()

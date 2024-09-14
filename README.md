@@ -44,12 +44,12 @@ If you use Composer, these dependencies should be handled automatically. If you 
 
 ### Configuration
 
-You can get your secret at https://www.convertapi.com/a
+You can get your API credentials at https://www.convertapi.com/a
 
 ```php
 use \ConvertApi\ConvertApi;
 
-ConvertApi::setApiSecret('your-api-secret');
+ConvertApi::setApiCredentials('your-api-secret-or-token');
 ```
 
 ### File conversion

@@ -3,8 +3,8 @@ require __DIR__ . '/../lib/ConvertApi/autoload.php';
 
 use \ConvertApi\ConvertApi;
 
-# set your api secret
-ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
+# set your api secret or token
+ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
 
 # Short example of conversions chaining, the PDF pages extracted and saved as separated JPGs and then ZIP'ed
 # https://www.convertapi.com/doc/chaining

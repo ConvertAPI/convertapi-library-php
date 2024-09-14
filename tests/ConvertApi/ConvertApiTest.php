@@ -11,25 +11,25 @@ class ConvertApiTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         // Save original values so that we can restore them after running tests
-        $this->origApiSecret = ConvertApi::getApiSecret();
+        $this->origApiCredentials = ConvertApi::getApiCredentials();
         $this->origApiBase = ConvertApi::getApiBase();
         $this->origUploadTimeout = ConvertApi::$uploadTimeout;
 
-        ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
+        ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
     }
 
     protected function tearDown(): void
     {
         // Restore original values
-        ConvertApi::setApiSecret($this->origApiSecret);
+        ConvertApi::setApiCredentials($this->origApiCredentials);
         ConvertApi::setApiBase($this->origApiBase);
         ConvertApi::$uploadTimeout = $this->origUploadTimeout;
     }
 
     public function testConfigurationAccessors()
     {
-        ConvertApi::setApiSecret('test-secret');
-        $this->assertEquals('test-secret', ConvertApi::getApiSecret());
+        ConvertApi::setApiCredentials('test-secret');
+        $this->assertEquals('test-secret', ConvertApi::getApiCredentials());
 
         ConvertApi::setApiBase('https://foo.bar');
         $this->assertEquals('https://foo.bar', ConvertApi::getApiBase());
