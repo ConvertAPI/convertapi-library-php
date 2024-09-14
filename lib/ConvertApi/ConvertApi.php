@@ -10,7 +10,7 @@ namespace ConvertApi;
 class ConvertApi
 {
     // ConvertAPI client version.
-    const VERSION = '2.0.1';
+    const VERSION = '3.0.0';
 
     // @var string The Convert API credentials. You can get your credentials at https://www.convertapi.com/a
     public static $apiCredentials;
