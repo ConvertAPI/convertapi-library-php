@@ -12,8 +12,8 @@ class ConvertApi
     // ConvertAPI client version.
     const VERSION = '2.0.1';
 
-    // @var string The Convert API secret. You can get your secret at https://www.convertapi.com/a
-    public static $apiSecret;
+    // @var string The Convert API credentials. You can get your credentials at https://www.convertapi.com/a
+    public static $apiCredentials;
 
     // @var string The base URL for the Convert API
     public static $apiBase = 'https://v2.convertapi.com/';
@@ -40,21 +40,21 @@ class ConvertApi
     private static $_client;
 
     /**
-     * @return string The API secret used for requests.
+     * @return string The API credentials used for requests.
      */
-    public static function getApiSecret()
+    public static function getApiCredentials()
     {
-        return self::$apiSecret;
+        return self::$apiCredentials;
     }
 
     /**
-     * Sets API secret used for requests.
+     * Sets API secret or token used for requests.
      *
-     * @param string $apiSecret
+     * @param string $apiCredentials
      */
-    public static function setApiSecret($apiSecret)
+    public static function setApiCredentials($apiCredentials)
     {
-        self::$apiSecret = $apiSecret;
+        self::$apiCredentials = $apiCredentials;
     }
 
     /**

@@ -3,8 +3,8 @@ require __DIR__ . '/../lib/ConvertApi/autoload.php';
 
 use \ConvertApi\ConvertApi;
 
-# set your api secret
-ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
+# set your api secret or token
+ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
 
 # Example of extracting first and last pages from PDF and then merging them back to new PDF.
 # https://www.convertapi.com/pdf-to-split

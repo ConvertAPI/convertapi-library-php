@@ -3,8 +3,8 @@ require __DIR__ . '/../lib/ConvertApi/autoload.php';
 
 use \ConvertApi\ConvertApi;
 
-# set your api secret
-ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
+# set your api secret or token
+ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
 
 # Example of converting content stream to PDF
 # https://www.convertapi.com/txt-to-pdf
