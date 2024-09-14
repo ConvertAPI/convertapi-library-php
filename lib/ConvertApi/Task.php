@@ -36,9 +36,7 @@ class Task
         }
 
         $fromFormat = $this->fromFormat ?: $this->detectFormat($params);
-        $converter = $this->detectConverter($params);
-        $converterPath = $converter ? "/converter/{$converter}" : '';
-        $path = 'convert/' . $fromFormat . '/to/' . $this->toFormat . $converterPath;
+        $path = 'convert/' . $fromFormat . '/to/' . $this->toFormat;
 
         $response = ConvertApi::client()->post($path, $params, $readTimeout);
 
@@ -96,16 +94,5 @@ class Task
         $detector = new FormatDetector($resource);
 
         return $detector->run();
-    }
-
-    private function detectConverter($params)
-    {
-        $keys = array_keys($params);
-
-        foreach ($keys as $key)
-            if (strtolower($key) == 'converter')
-                return $params[$key];
-
-        return;
     }
 }
