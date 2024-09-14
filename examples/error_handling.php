@@ -7,7 +7,7 @@ use \ConvertApi\ConvertApi;
 ConvertApi::setApiSecret(getenv('CONVERT_API_SECRET'));
 
 try {
-    $result = ConvertApi::convert('png', ['File' => 'files/test.docx', 'converter' => 'DUMMY']);
+    $result = ConvertApi::convert('svg', ['File' => 'files/test.docx']);
 } catch (\ConvertApi\Error\Api $error) {
     echo "Got API error code: " . $error->getCode() . "\n";
     echo $error->getMessage();
