@@ -111,12 +111,12 @@ $result = ConvertApi::convert(
 
 ### User information
 
-You can always check your remaining seconds amount programmatically by fetching [user information](https://www.convertapi.com/doc/user).
+You can always check your usage by fetching [user information](https://www.convertapi.com/doc/user).
 
 ```php
 $info = ConvertApi::getUser();
 
-echo $info['SecondsLeft'];
+echo $info['ConversionsConsumed'];
 ```
 
 ### Alternative domain

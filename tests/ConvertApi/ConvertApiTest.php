@@ -45,7 +45,7 @@ class ConvertApiTest extends \PHPUnit\Framework\TestCase
         $user_info = ConvertApi::getUser();
 
         $this->assertIsArray($user_info);
-        $this->assertArrayHasKey('SecondsLeft', $user_info);
+        $this->assertArrayHasKey('ConversionsConsumed', $user_info);
     }
 
     public function testUploadFile()
