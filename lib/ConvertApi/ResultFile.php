@@ -36,7 +36,7 @@ class ResultFile
     }
 
     /**
-     * @return string Converted file contents
+     * @return false|string Converted file contents
      */
     function getContents()
     {
