@@ -1,6 +1,6 @@
 <?php
   $file_path = 'jmeter-docx.docx';
-  $secret = 'BF1A7s5ODYhxBfVelFLKU2OzSgoJAt0a';
+  $token = 'BF1A7s5ODYhxBfVelFLKU2OzSgoJAt0a';
 
   if (file_exists($file_path)) {
     $curl = curl_init();
@@ -10,7 +10,7 @@
     curl_setopt($curl, CURLOPT_POST, true);
     $headers = array(
         'Accept: application/octet-stream',
-        'Authorization: Bearer ' . $secret
+        'Authorization: Bearer ' . $token
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     $postData = array(
