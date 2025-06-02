@@ -8,7 +8,8 @@
     curl_setopt($curl, CURLOPT_BINARYTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/octet-stream'));
-    curl_setopt($curl, CURLOPT_URL, "https://v2.convertapi.com/convert/docx/to/pdf?secret=".$secret);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Bearer '.$secret));
+    curl_setopt($curl, CURLOPT_URL, "https://v2.convertapi.com/convert/docx/to/pdf");
     curl_setopt($curl, CURLOPT_POSTFIELDS, array('file' => new CurlFile($file_path)), 'storefile' => 'false');
     $result = curl_exec($curl);
     if (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 200) {
