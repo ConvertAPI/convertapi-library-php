@@ -1,6 +1,6 @@
 <?php
   $file_path = 'jmeter-docx.docx';
-  $token = 'BF1A7s5ODYhxBfVelFLKU2OzSgoJAt0a';
+  $token = 'api_token';
 
   if (file_exists($file_path)) {
     $curl = curl_init();
