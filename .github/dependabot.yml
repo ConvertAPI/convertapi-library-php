@@ -1,0 +1,30 @@
+# Weekly dependency updates, each opened as a pull request against main that must pass the `build` check
+# and is merged like any other change (merge commit). Merging releases nothing: a new Packagist version
+# still needs a GitHub Release (see RELEASING.md).
+version: 2
+updates:
+  # The workflows pin every action to a commit SHA with a version comment; Dependabot updates both.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+    labels: [dependencies]
+
+  # The library itself has no Composer dependencies; this keeps the test tooling (PHPUnit) current.
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      composer-minor-and-patch:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: deps
+    labels: [dependencies]

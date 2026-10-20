@@ -1,7 +1,7 @@
 # ConvertAPI PHP Client
 
 [![PHP version](https://badge.fury.io/ph/convertapi%2Fconvertapi-php.svg)](https://packagist.org/packages/convertapi/convertapi-php)
-[![Build Status](https://github.com/ConvertAPI/convertapi-php/actions/workflows/main.yml/badge.svg)](https://github.com/ConvertAPI/convertapi-php/actions)
+[![Build Status](https://github.com/ConvertAPI/convertapi-library-php/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ConvertAPI/convertapi-library-php/actions/workflows/build.yml)
 
 ## Convert your files with our online file conversion API
 
@@ -129,7 +129,7 @@ ConvertApi::setApiBase('https://eu-v2.convertapi.com/');
 
 ### More examples
 
-Find more advanced examples in the [examples/](https://github.com/ConvertAPI/convertapi-php/tree/master/examples) folder.
+Find more advanced examples in the [examples/](https://github.com/ConvertAPI/convertapi-library-php/tree/main/examples) folder.
 
 ## Development
 
@@ -141,7 +141,7 @@ CONVERT_API_SECRET=your-api-secret ./bin/phpunit
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ConvertAPI/convertapi-php. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ConvertAPI/convertapi-library-php. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 

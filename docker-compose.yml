@@ -24,3 +24,11 @@ services:
       - .:/app
     working_dir: /app
     command: bin/phpunit
+
+  php84:
+    image: php:8.4-cli
+    env_file: .env
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: bin/phpunit

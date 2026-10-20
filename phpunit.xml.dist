@@ -7,6 +7,9 @@
   displayDetailsOnTestsThatTriggerErrors="true"
   displayDetailsOnTestsThatTriggerNotices="true"
   displayDetailsOnTestsThatTriggerWarnings="true"
+  failOnDeprecation="true"
+  failOnNotice="true"
+  failOnWarning="true"
 >
   <testsuites>
     <testsuite name="ConvertApi Test Suite">

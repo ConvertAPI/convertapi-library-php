@@ -89,7 +89,6 @@ class Client
         }
 
         fclose($fp);
-        curl_close($ch);
 
         return $path;
     }
@@ -118,8 +117,6 @@ class Client
 
         $this->checkResponse($ch, $response);
 
-        curl_close($ch);
-
         return $this->parseResponse($response);
     }
 
@@ -127,8 +124,6 @@ class Client
     {
         $message = curl_error($ch);
         $code = curl_errno($ch);
-
-        curl_close($ch);
 
         throw new Error\Client($message, $code);
     }
@@ -142,8 +137,6 @@ class Client
 
         if ($http_code == 200)
             return;
-
-        curl_close($ch);
 
         try
         {

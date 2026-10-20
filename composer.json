@@ -2,13 +2,13 @@
     "name": "convertapi/convertapi-php",
     "description": "Convert API PHP Client",
     "keywords": ["convert", "api", "client", "conversion"],
-    "homepage": "https://github.com/ConvertAPI/convertapi-php",
+    "homepage": "https://github.com/ConvertAPI/convertapi-library-php",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "ConvertAPI and contributors",
-            "homepage": "https://github.com/ConvertAPI/convertapi-php/graphs/contributors"
+            "homepage": "https://github.com/ConvertAPI/convertapi-library-php/graphs/contributors"
         }
     ],
     "require": {

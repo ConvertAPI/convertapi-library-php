@@ -1,0 +1,159 @@
+name: Build
+run-name: >-
+  ${{ github.event_name == 'pull_request' && format('Checking that #{0} builds', github.event.pull_request.number)
+   || format('Building {0}', github.ref_name) }}
+
+# Trunk-based: main is the only long-lived branch. Every pull request and every push to main validates
+# composer.json, lints every PHP file and runs the offline tests on each supported PHP version. Nothing is
+# released here: Packagist publishes a version when a v{semver} tag appears, and tags come only from a
+# GitHub Release (see RELEASING.md and release.yml).
+#
+# The required status check is the `build` job, which passes only when every PHP version passed. The
+# `integration` job calls the ConvertAPI API with the CONVERT_API_SECRET secret; it is not required, so an
+# API outage cannot block a merge, and it is skipped where the secret is unavailable (forks, Dependabot).
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # A newer push to the same pull request cancels the older build; builds of main never cancel each other.
+  group: build-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Lint
+        run: |
+          set -euo pipefail
+          find lib tests examples -name '*.php' -print0 | xargs -0 -n1 php -l >/dev/null
+
+      - name: Offline tests
+        run: bin/phpunit --exclude-group integration
+
+  integration:
+    name: integration (PHP ${{ matrix.php }})
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.5']
+    env:
+      CONVERT_API_SECRET: ${{ secrets.CONVERT_API_SECRET }}
+      CONVERT_API_BASE: ${{ vars.CONVERT_API_BASE }}
+    steps:
+      - name: Check for the API secret
+        id: secret
+        run: |
+          if [ -z "$CONVERT_API_SECRET" ]; then
+            echo "::notice::CONVERT_API_SECRET is not available to this run (a fork or Dependabot pull request), so the integration tests are skipped."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.secret.outputs.run == 'true'
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        if: steps.secret.outputs.run == 'true'
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Install
+        if: steps.secret.outputs.run == 'true'
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Integration tests against ${{ vars.CONVERT_API_BASE || 'https://v2.convertapi.com/' }}
+        if: steps.secret.outputs.run == 'true'
+        run: bin/phpunit --group integration
+
+  build:
+    name: build
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check every PHP version passed
+        env:
+          RESULT: ${{ needs.test.result }}
+        run: |
+          if [ "$RESULT" != success ]; then
+            echo "::error::The PHP version matrix finished with '$RESULT'."
+            exit 1
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # ConvertApi::VERSION goes into the User-Agent of every request, and release.yml refuses a tag that
+      # does not match it. It may run ahead of the latest release, never behind it.
+      - name: Check the version constant
+        id: version
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n "s/^ *const VERSION = '\(.*\)';.*/\1/p" lib/ConvertApi/ConvertApi.php)
+          SEMVER='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
+          if ! [[ "$VERSION" =~ $SEMVER ]]; then
+            echo "::error file=lib/ConvertApi/ConvertApi.php::ConvertApi::VERSION '$VERSION' is not {major}.{minor}.{patch}[-{pre-release}]"
+            exit 1
+          fi
+          LATEST=$(git tag --list 'v*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^v//' | sort -V | tail -n1)
+          if [ -n "$LATEST" ] && [ "$(printf '%s\n%s\n' "$LATEST" "${VERSION%%-*}" | sort -V | tail -n1)" != "${VERSION%%-*}" ]; then
+            echo "::error file=lib/ConvertApi/ConvertApi.php::ConvertApi::VERSION $VERSION is lower than the latest release $LATEST"
+            exit 1
+          fi
+          {
+            echo "version=$VERSION"
+            echo "latest=$LATEST"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          LATEST: ${{ steps.version.outputs.latest }}
+        run: |
+          {
+            echo "| | |"
+            echo "|---|---|"
+            echo "| \`ConvertApi::VERSION\` | \`$VERSION\` (latest release: \`v$LATEST\`) |"
+            echo "| PHP | 8.1, 8.2, 8.3, 8.4, 8.5 |"
+          } >> "$GITHUB_STEP_SUMMARY"
