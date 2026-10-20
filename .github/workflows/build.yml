@@ -131,7 +131,7 @@ jobs:
         run: |
           set -euo pipefail
           VERSION=$(sed -n "s/^ *const VERSION = '\(.*\)';.*/\1/p" lib/ConvertApi/ConvertApi.php)
-          SEMVER='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
+          SEMVER='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(\.(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?$'
           if ! [[ "$VERSION" =~ $SEMVER ]]; then
             echo "::error file=lib/ConvertApi/ConvertApi.php::ConvertApi::VERSION '$VERSION' is not {major}.{minor}.{patch}[-{pre-release}]"
             exit 1
@@ -139,6 +139,11 @@ jobs:
           LATEST=$(git tag --list 'v*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^v//' | sort -V | tail -n1)
           if [ -n "$LATEST" ] && [ "$(printf '%s\n%s\n' "$LATEST" "${VERSION%%-*}" | sort -V | tail -n1)" != "${VERSION%%-*}" ]; then
             echo "::error file=lib/ConvertApi/ConvertApi.php::ConvertApi::VERSION $VERSION is lower than the latest release $LATEST"
+            exit 1
+          fi
+          # SemVer sorts 3.0.1-beta.1 below 3.0.1, so a pre-release of the latest release is a step back.
+          if [[ "$VERSION" == *-* ]] && [ "${VERSION%%-*}" = "$LATEST" ]; then
+            echo "::error file=lib/ConvertApi/ConvertApi.php::ConvertApi::VERSION $VERSION is a pre-release of $LATEST, which is already released"
             exit 1
           fi
           {

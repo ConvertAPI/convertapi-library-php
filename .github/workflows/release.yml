@@ -61,7 +61,7 @@ jobs:
         run: |
           set -euo pipefail
           # SemVer 2.0 without build metadata (Composer ignores "+...").
-          SEMVER='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
+          SEMVER='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(\.(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?$'
           if ! [[ "$TAG" =~ $SEMVER ]]; then
             echo "::error::Tag '$TAG' is not v{major}.{minor}.{patch} or v{major}.{minor}.{patch}-{pre-release}, e.g. v3.0.1 or v3.1.0-beta.1"
             exit 1
@@ -139,10 +139,11 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
           SHA: ${{ steps.tag.outputs.sha }}
         run: |
+          # Steps run with bash -e: a failed request or parse sets REF empty and the loop tries again.
           set -uo pipefail
           for _ in $(seq 1 30); do
             REF=$(curl -fsS -H 'Cache-Control: no-cache' "https://repo.packagist.org/p2/$PACKAGE.json" \
-                  | jq -r --arg p "$PACKAGE" --arg v "$TAG" '.packages[$p][] | select(.version == $v) | .source.reference // empty')
+                  | jq -r --arg p "$PACKAGE" --arg v "$TAG" '.packages[$p][] | select(.version == $v) | .source.reference // empty') || REF=''
             if [ "$REF" = "$SHA" ]; then
               echo "$PACKAGE $TAG is on Packagist from $SHA"
               exit 0
