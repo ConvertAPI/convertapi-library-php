@@ -1,0 +1,170 @@
+name: Release
+run-name: Checking convertapi/convertapi-php ${{ github.event.release.tag_name }} on Packagist
+
+# A release is a GitHub Release, never a merge. Merging to main only builds (build.yml). Publishing the
+# Release v{semver} creates the tag, and Packagist publishes every v* tag it sees through the repository's
+# GitHub hook - there is no upload step and no registry key. This workflow checks that the release is
+# legitimate and complete: who published it, that the tag is SemVer and on main, that ConvertApi::VERSION
+# matches it, that the tests pass against the API, and that Packagist serves the version from this commit.
+#
+#   gh release create v3.0.1 --target main --generate-notes             -> convertapi/convertapi-php v3.0.1
+#   gh release create v3.1.0-beta.1 --target main --prerelease ...      -> convertapi/convertapi-php v3.1.0-beta.1
+#
+# Packagist versions are public as soon as the tag exists, so a failure here does not stop a release; it
+# says the version needs a fix-forward release (see RELEASING.md). Nothing here retries or moves a tag.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+env:
+  # Only this account may publish a Release. GitHub cannot express this as a permission on the Team plan,
+  # so it is checked here; the real control is the v* tag ruleset (only repository admins create v* tags).
+  PUBLISHER: tomasr78
+  PACKAGE: convertapi/convertapi-php
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: packagist
+      url: https://packagist.org/packages/convertapi/convertapi-php#${{ github.event.release.tag_name }}
+    concurrency:
+      group: release-packagist
+      cancel-in-progress: false
+    steps:
+      - name: Check who published the release
+        run: |
+          # A re-run keeps GITHUB_ACTOR as the original user; GITHUB_TRIGGERING_ACTOR is whoever pressed
+          # "Re-run", so both must be the publisher or anyone with write access could replay a release.
+          if [ "$GITHUB_ACTOR" != "$PUBLISHER" ] || [ "${GITHUB_TRIGGERING_ACTOR:-$GITHUB_ACTOR}" != "$PUBLISHER" ]; then
+            echo "::error::Only $PUBLISHER may publish a release - this release was published by $GITHUB_ACTOR and run by ${GITHUB_TRIGGERING_ACTOR:-$GITHUB_ACTOR}."
+            exit 1
+          fi
+          echo "Published by $GITHUB_ACTOR"
+
+      # The release event runs this file from the tag, so the workflow and the code come from the same commit.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check the tag and the version
+        id: tag
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          PRERELEASE: ${{ github.event.release.prerelease }}
+        run: |
+          set -euo pipefail
+          # SemVer 2.0 without build metadata (Composer ignores "+...").
+          SEMVER='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
+          if ! [[ "$TAG" =~ $SEMVER ]]; then
+            echo "::error::Tag '$TAG' is not v{major}.{minor}.{patch} or v{major}.{minor}.{patch}-{pre-release}, e.g. v3.0.1 or v3.1.0-beta.1"
+            exit 1
+          fi
+          if [ "$GITHUB_REF" != "refs/tags/$TAG" ]; then
+            echo "::error::The run is on $GITHUB_REF, not on the release tag refs/tags/$TAG"
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          SHA=$(git rev-parse "refs/tags/$TAG^{commit}")
+          if [ "$(git rev-parse HEAD)" != "$SHA" ]; then
+            echo "::error::Checked out $(git rev-parse HEAD), but $TAG points at $SHA"
+            exit 1
+          fi
+
+          # The GitHub "pre-release" tick and the version must agree, so a preview cannot pass for the
+          # latest stable release on GitHub, and a stable version cannot hide as a pre-release.
+          if [[ "$VERSION" == *-* ]]; then
+            if [ "$PRERELEASE" != true ]; then
+              echo "::error::$TAG is a pre-release version, so the GitHub Release must be marked as a pre-release (gh release create --prerelease)"
+              exit 1
+            fi
+          elif [ "$PRERELEASE" = true ]; then
+            echo "::error::$TAG is a stable version, but the GitHub Release is marked as a pre-release. Use a pre-release version such as ${TAG}-beta.1, or untick pre-release."
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "$SHA" origin/main; then
+            echo "::error::$TAG ($SHA) is not on main. Releases, pre-releases included, are tagged on main only."
+            exit 1
+          fi
+
+          # The library has no build step - Packagist serves the tagged tree as it is - so the version the
+          # client reports in its User-Agent is the constant in the code, and it must be the tag's.
+          CONSTANT=$(sed -n "s/^ *const VERSION = '\(.*\)';.*/\1/p" lib/ConvertApi/ConvertApi.php)
+          if [ "$CONSTANT" != "$VERSION" ]; then
+            echo "::error file=lib/ConvertApi/ConvertApi.php::ConvertApi::VERSION is '$CONSTANT' at $TAG, not '$VERSION'. Packagist already serves $TAG; release the next version with the constant bumped."
+            exit 1
+          fi
+
+          {
+            echo "version=$VERSION"
+            echo "sha=$SHA"
+          } >> "$GITHUB_OUTPUT"
+          echo "Releasing $PACKAGE $TAG from $SHA"
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install
+        run: |
+          composer validate --strict
+          composer install --no-interaction --no-progress --prefer-dist
+
+      # Every test, the API ones included. They run against CONVERT_API_BASE (the API the repository is
+      # configured to test against) with CONVERT_API_SECRET, both set in the repository's Actions settings.
+      - name: Tests
+        env:
+          CONVERT_API_SECRET: ${{ secrets.CONVERT_API_SECRET }}
+          CONVERT_API_BASE: ${{ vars.CONVERT_API_BASE }}
+        run: |
+          if [ -z "$CONVERT_API_SECRET" ]; then
+            echo "::error::The CONVERT_API_SECRET repository secret is not set, so the API tests cannot run."
+            exit 1
+          fi
+          bin/phpunit
+
+      # The GitHub hook tells Packagist about the new tag within seconds; Packagist then crawls the
+      # repository and adds the version, usually within a few minutes. The tag must be served from the
+      # tagged commit, or Packagist has an older copy of the tag.
+      - name: Wait for Packagist to serve the version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          SHA: ${{ steps.tag.outputs.sha }}
+        run: |
+          set -uo pipefail
+          for _ in $(seq 1 30); do
+            REF=$(curl -fsS -H 'Cache-Control: no-cache' "https://repo.packagist.org/p2/$PACKAGE.json" \
+                  | jq -r --arg p "$PACKAGE" --arg v "$TAG" '.packages[$p][] | select(.version == $v) | .source.reference // empty')
+            if [ "$REF" = "$SHA" ]; then
+              echo "$PACKAGE $TAG is on Packagist from $SHA"
+              exit 0
+            elif [ -n "$REF" ]; then
+              echo "::error::Packagist serves $TAG from $REF, not from $SHA. Check https://packagist.org/packages/$PACKAGE"
+              exit 1
+            fi
+            sleep 30
+          done
+          echo "::error::Packagist has not served $PACKAGE $TAG after 15 minutes. Check the GitHub hook (Settings > Webhooks) and https://packagist.org/packages/$PACKAGE, then press Update there."
+          exit 1
+
+      - name: Summary
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          SHA: ${{ steps.tag.outputs.sha }}
+          API: ${{ vars.CONVERT_API_BASE || 'https://v2.convertapi.com/' }}
+        run: |
+          {
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Package | [\`$PACKAGE $TAG\`](https://packagist.org/packages/$PACKAGE#$TAG) |"
+            echo "| Commit | \`$SHA\` |"
+            echo "| Tested against | $API (PHP 8.5) |"
+          } >> "$GITHUB_STEP_SUMMARY"

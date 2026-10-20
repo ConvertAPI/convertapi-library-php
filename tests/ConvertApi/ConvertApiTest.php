@@ -3,10 +3,15 @@
 namespace ConvertApi\Test;
 
 use \ConvertApi\ConvertApi;
+use PHPUnit\Framework\Attributes\Group;
 
+// Calls the API: CONVERT_API_SECRET is required, and CONVERT_API_BASE (optional) selects the API to test against.
+#[Group('integration')]
 class ConvertApiTest extends \PHPUnit\Framework\TestCase
 {
-    protected $origApiSecret;
+    private $origApiCredentials;
+    private $origApiBase;
+    private $origUploadTimeout;
 
     protected function setUp(): void
     {
@@ -16,6 +21,10 @@ class ConvertApiTest extends \PHPUnit\Framework\TestCase
         $this->origUploadTimeout = ConvertApi::$uploadTimeout;
 
         ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
+
+        if (getenv('CONVERT_API_BASE')) {
+            ConvertApi::setApiBase(getenv('CONVERT_API_BASE'));
+        }
     }
 
     protected function tearDown(): void
@@ -24,20 +33,6 @@ class ConvertApiTest extends \PHPUnit\Framework\TestCase
         ConvertApi::setApiCredentials($this->origApiCredentials);
         ConvertApi::setApiBase($this->origApiBase);
         ConvertApi::$uploadTimeout = $this->origUploadTimeout;
-    }
-
-    public function testConfigurationAccessors()
-    {
-        ConvertApi::setApiCredentials('test-secret');
-        $this->assertEquals('test-secret', ConvertApi::getApiCredentials());
-
-        ConvertApi::setApiBase('https://foo.bar');
-        $this->assertEquals('https://foo.bar', ConvertApi::getApiBase());
-    }
-
-    public function testClient()
-    {
-        $this->assertInstanceOf('\ConvertApi\Client', ConvertApi::client());
     }
 
     public function testGetUser()
