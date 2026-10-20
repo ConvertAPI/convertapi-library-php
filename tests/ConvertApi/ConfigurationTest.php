@@ -40,6 +40,10 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
 
     public function testVersionIsSemVer()
     {
-        $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/', ConvertApi::VERSION);
+        $id = '(0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)';
+        $this->assertMatchesRegularExpression(
+            "/^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-$id(\\.$id)*)?$/",
+            ConvertApi::VERSION
+        );
     }
 }
