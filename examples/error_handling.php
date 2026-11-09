@@ -7,7 +7,8 @@ use \ConvertApi\ConvertApi;
 ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
 
 try {
-    $result = ConvertApi::convert('svg', ['File' => 'files/test.docx']);
+    # test.docx is not a PDF, so the API rejects this PDF split with a validation error
+    $result = ConvertApi::convert('split', ['File' => 'files/test.docx'], 'pdf');
 } catch (\ConvertApi\Error\Api $error) {
     echo "Got API error code: " . $error->getCode() . "\n";
     echo $error->getMessage();

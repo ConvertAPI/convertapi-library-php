@@ -7,9 +7,9 @@ use \ConvertApi\ConvertApi;
 ConvertApi::setApiCredentials(getenv('CONVERT_API_SECRET'));
 
 # Example of converting Web Page URL to PDF file
-# https://www.convertapi.com/web-to-pdf
+# https://www.convertapi.com/html-to-pdf
 
-$fromFormat = 'web';
+$fromFormat = 'html';
 $conversionTimeout = 180;
 $dir = sys_get_temp_dir();
 

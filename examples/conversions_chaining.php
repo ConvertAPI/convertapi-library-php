@@ -20,7 +20,7 @@ $count = count($jpgResult->getFiles());
 
 echo "Conversions done. Cost: {$cost}. Total files created: {$count}\n";
 
-$zipResult = ConvertApi::convert('zip', ['Files' => $jpgResult->getFiles()], 'any');
+$zipResult = ConvertApi::convert('zip', ['Files' => $jpgResult->getFiles()], 'file');
 
 $cost = $zipResult->getConversionCost();
 $count = count($zipResult->getFiles());
