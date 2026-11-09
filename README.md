@@ -135,6 +135,7 @@ Find more advanced examples in the [examples/](https://github.com/ConvertAPI/con
 - [convert_stream.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/convert_stream.php) - Convert text from an in-memory stream to PDF
 - [convert_url_to_pdf.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/convert_url_to_pdf.php) - Convert a web page URL to PDF
 - [convert_word_to_pdf_and_png.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/convert_word_to_pdf_and_png.php) - Convert one Word DOCX file to PDF and to PNG
+- [create_pdf_thumbnail.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/create_pdf_thumbnail.php) - Turn the first page of a PDF into a JPG thumbnail
 - [error_handling.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/error_handling.php) - Catch an API error and print its code and message
 - [retrieve_user_information.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/retrieve_user_information.php) - Retrieve your ConvertAPI account information
 - [split_and_merge_pdf.php](https://github.com/ConvertAPI/convertapi-library-php/blob/main/examples/split_and_merge_pdf.php) - Split a PDF and merge its first and last pages into a new PDF
