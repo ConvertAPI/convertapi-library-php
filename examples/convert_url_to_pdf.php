@@ -16,7 +16,7 @@ $dir = sys_get_temp_dir();
 $result = ConvertApi::convert(
     'pdf',
     [
-        'Url' => 'https://en.wikipedia.org/wiki/Data_conversion',
+        'Url' => 'https://cdn.convertapi.com/public/files/demo',
         'FileName' => 'web-example'
     ],
     $fromFormat,
