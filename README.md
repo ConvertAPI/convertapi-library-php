@@ -44,18 +44,18 @@ If you use Composer, these dependencies should be handled automatically. If you 
 
 ### Configuration
 
-You can get your API credentials at https://www.convertapi.com/a
+You can get your API token at https://www.convertapi.com/a/authentication
 
 ```php
 use \ConvertApi\ConvertApi;
 
-ConvertApi::setApiCredentials('your-api-secret-or-token');
+ConvertApi::setApiCredentials('api-token');
 ```
 
 ### File conversion
 
 Convert file to PDF example. All supported formats and options can be found
-[here](https://www.convertapi.com/conversions).
+[here](https://www.convertapi.com/api).
 
 ```php
 $result = ConvertApi::convert('pdf', ['File' => '/path/to/my_file.docx']);
@@ -96,7 +96,7 @@ $result = ConvertApi::convert(
 #### Additional conversion parameters
 
 ConvertAPI accepts additional conversion parameters depending on selected formats. All conversion
-parameters and explanations can be found [here](https://www.convertapi.com/conversions).
+parameters and explanations can be found [here](https://www.convertapi.com/api).
 
 ```php
 $result = ConvertApi::convert(
@@ -104,14 +104,14 @@ $result = ConvertApi::convert(
     [
         'File' => '/path/to/my_file.docx',
         'PageRange' => '1-10',
-        'PdfResolution' => '150',
+        'Pdfa' => true,
     ]
 );
 ```
 
 ### User information
 
-You can always check your usage by fetching [user information](https://www.convertapi.com/doc/user).
+You can always check your usage by fetching [user information](https://www.convertapi.com/docs/user-information).
 
 ```php
 $info = ConvertApi::getUser();
@@ -121,7 +121,7 @@ echo $info['ConversionsConsumed'];
 
 ### Alternative domain
 
-Use `setApiBase` method to set alternative service domain. Dedicated to the region [domain list](https://www.convertapi.com/doc/servers-location).
+Use `setApiBase` method to set alternative service domain. Dedicated to the region [domain list](https://www.convertapi.com/docs/servers-location).
 
 ```php
 ConvertApi::setApiBase('https://eu-v2.convertapi.com/');
@@ -146,12 +146,12 @@ Find more advanced examples in the [examples/](https://github.com/ConvertAPI/con
 Testing is done with PHPUnit:
 
 ```sh
-CONVERT_API_SECRET=your-api-secret ./bin/phpunit
+CONVERT_API_SECRET=your-api-token ./bin/phpunit
 ```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ConvertAPI/convertapi-library-php. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ConvertAPI/convertapi-library-php. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://www.contributor-covenant.org) code of conduct.
 
 ## License
 
